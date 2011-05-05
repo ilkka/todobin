@@ -3,12 +3,12 @@ import QtQuick 1.1
 Widget {
     id: root
 
-    property string inputMask: field.inputMask
-    property bool acceptableInput: field.acceptableInput
-    property color textColor: field.color
-    property string text: field.text
-    property enumeration echoMode: field.echoMode
-    property string hint: hintview.text
+    property alias inputMask: field.inputMask
+    property alias acceptableInput: field.acceptableInput
+    property alias textColor: field.color
+    property alias text: field.text
+    property alias echoMode: field.echoMode
+    property alias hint: hintview.text
 
     property int innerMargin: 5
 
