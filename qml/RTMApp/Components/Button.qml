@@ -14,6 +14,10 @@ Widget {
     signal clicked
     signal released
 
+    // Size based on children's size
+    width: childrenRect.width + margin * 2
+    height: childrenRect.height + margin * 2
+
     Rectangle {
         id: background
         border.color: "#555555"
