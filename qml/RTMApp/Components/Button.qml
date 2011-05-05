@@ -8,6 +8,11 @@ Item {
     // Margin for button background
     property int margin: 5
 
+    // Button label
+    property string label: "Button"
+
+    signal clicked
+
     Rectangle {
         id: background
         border.color: "#555555"
