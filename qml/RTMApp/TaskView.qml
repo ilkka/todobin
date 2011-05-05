@@ -7,6 +7,8 @@ Column {
     id: root
     anchors.fill: parent
 
+    signal requestSettingsView
+
     Button {
         label: "Test if we're logged in"
         onClicked: {
@@ -19,5 +21,15 @@ Column {
         onClicked: Qt.quit()
     }
 
-    Component.onCompleted: P.priv(root).app = Applib.init(settings)
+    Button {
+        label: "Settings"
+        onClicked: root.requestSettingsView()
+    }
+
+    Component.onCompleted: {
+        P.priv(root).app = Applib.init(settings)
+        if (settings.apikey.length === 0 || settings.secret.length === 0) {
+            root.requestSettingsView()
+        }
+    }
 }
