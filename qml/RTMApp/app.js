@@ -11,17 +11,15 @@ function test_login() {
 /**
  * Initialize the app.
  *
- * @param api_key the RTM API key.
- * @param secret the RTM shared secret.
- * @param endpoint the RTM API endpoint URL.
+ * @param settings the application settings object.
  * @return app object.
  */
-var init = function(api_key, secret, endpoint) {
+var init = function(settings) {
     return {
             // data
-            api_key: api_key,
-            secret: secret,
-            endpoint: endpoint,
+            api_key: settings.apikey,
+            secret: settings.secret,
+            endpoint: settings.endpoint,
 
             // methods
             test_login: test_login

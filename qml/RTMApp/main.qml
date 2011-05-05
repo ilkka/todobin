@@ -24,5 +24,5 @@ Rectangle {
        }
     }
 
-    Component.onCompleted: P.priv(root).app = Applib.init("apikey", "sikrit", "http://www.example.com")
+    Component.onCompleted: P.priv(root).app = Applib.init(settings)
 }
