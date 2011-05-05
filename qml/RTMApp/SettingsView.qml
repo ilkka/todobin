@@ -6,6 +6,7 @@ Rectangle {
     width: 360
     height: 360
 
+    signal settingsDone
 
     Column {
         anchors.fill: parent
@@ -41,6 +42,7 @@ Rectangle {
                 settings.apikey = apikeyfield.text
                 settings.secret = secretfield.text
                 settings.endpoint = endpointfield.text
+                root.settingsDone()
             }
         }
 
