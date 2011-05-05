@@ -10,7 +10,6 @@ Rectangle {
 
     Column {
         anchors.fill: parent
-        visible: mainviewloader.status != Loader.Ready
 
         TextField {
             id: apikeyfield
