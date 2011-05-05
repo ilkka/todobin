@@ -17,6 +17,7 @@ Rectangle {
         visible: mainviewloader.status != Loader.Ready
 
         TextField {
+            id: apikeyfield
             anchors.left: parent.left
             anchors.right: parent.right
             hint: "API key"
@@ -24,6 +25,7 @@ Rectangle {
         }
 
         TextField {
+            id: secretfield
             anchors.left: parent.left
             anchors.right: parent.right
             hint: "Secret"
@@ -31,6 +33,7 @@ Rectangle {
         }
 
         TextField {
+            id: endpointfield
             anchors.left: parent.left
             anchors.right: parent.right
             hint: "Endpoint"
@@ -40,6 +43,9 @@ Rectangle {
         Button {
             label: "Save"
             onClicked: {
+                settings.apikey = apikeyfield.text
+                settings.secret = secretfield.text
+                settings.endpoint = endpointfield.text
                 mainviewloader.source = "main.qml"
             }
         }
