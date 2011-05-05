@@ -14,10 +14,10 @@ Column {
         }
     }
 
-   Button {
-       label: "Quit"
-       onClicked: Qt.quit()
-   }
+    Button {
+        label: "Quit"
+        onClicked: Qt.quit()
+    }
 
-   Component.onCompleted: P.priv(root).app = Applib.init(settings)
+    Component.onCompleted: P.priv(root).app = Applib.init(settings)
 }
