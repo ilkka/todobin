@@ -17,13 +17,7 @@ int main(int argc, char *argv[])
     QmlApplicationViewer viewer;
     viewer.rootContext()->setContextProperty("settings", &settings);
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-
-    if (settings.apikey().isEmpty() || settings.secret().isEmpty()) {
-        viewer.setMainQmlFile(QLatin1String("qml/RTMApp/settings.qml"));
-    } else {
-        viewer.setMainQmlFile(QLatin1String("qml/RTMApp/main.qml"));
-    }
-
+    viewer.setMainQmlFile(QLatin1String("qml/RTMApp/main.qml"));
     viewer.showExpanded();
 
     return app.exec();
