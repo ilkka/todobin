@@ -1,6 +1,8 @@
 /* Main application engine for RTMApp
  */
 
+.pragma library
+
 /**
  * Test login
  */
