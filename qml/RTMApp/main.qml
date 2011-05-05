@@ -1,14 +1,12 @@
 import QtQuick 1.0
+import "./Components"
 
 Rectangle {
     width: 360
     height: 360
-    Text {
-        text: "Hello World"
+    Button {
         anchors.centerIn: parent
-    }
-    MouseArea {
-        anchors.fill: parent
+        label: "Test if we're logged in"
         onClicked: {
             Qt.quit();
         }
