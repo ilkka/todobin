@@ -3,17 +3,20 @@ import QtQuick 1.0
 Widget {
     id: root
 
+    property alias text: field.text
+
     property alias inputMask: field.inputMask
     property alias acceptableInput: field.acceptableInput
     property alias textColor: field.color
-    property alias text: field.text
     property alias echoMode: field.echoMode
     property alias hint: hintview.text
 
-    property int innerMargin: 5
+    property int minimumWidth: 100
 
-    width: 100
-    height: 30
+    clip: true
+
+    width: Math.max(field.model.paintedWidth + 10, minimumWidth)
+    height: field.model.paintedHeight + 10
 
     Rectangle {
         gradient: Gradient {
@@ -29,38 +32,32 @@ Widget {
 
         border.color: "#555555"
         border.width: 1
-        radius: 5
+        radius: 8
 
         anchors.fill: parent
-        anchors.margins: root.innerMargin
+    }
 
-        TextInput {
-            id: field
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: root.innerMargin
+    Text {
+        id: hintview
+        anchors.fill: parent
+        anchors.margins: 5
+        color: "#808080"
+        visible: hintview.text && !field.activeFocus && !field.text
+    }
 
-            onFocusChanged: {
-                if (!field.focus && field.text.length == 0) {
-                    hintview.visible = true
-                }
-            }
-        }
+    TextInput {
+        id: field
+        anchors.fill: parent
+        anchors.margins: 5
 
-        Text {
-            id: hintview
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.margins: root.innerMargin
-            color: "#808080"
+        autoScroll: false
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    hintview.visible = false
-                    field.focus = true
-                }
+        // This trick from Qt Components
+        property variant model: Text { text: field.text; visible: false }
+
+        onFocusChanged: {
+            if (!field.focus && field.text.length == 0) {
+                hintview.visible = true
             }
         }
     }
