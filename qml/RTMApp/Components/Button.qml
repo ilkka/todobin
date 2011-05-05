@@ -17,6 +17,10 @@ Item {
     signal clicked
     signal released
 
+    // Size based on rectangle size
+    width: background.width + margin * 2
+    height: background.height + margin * 2
+
     Rectangle {
         id: background
         border.color: "#555555"
@@ -36,8 +40,11 @@ Item {
             }
         }
 
-        anchors.fill: parent
-        anchors.margins: root.margin
+        // Size based on label size
+        width: label.paintedWidth + labelMargin * 2
+        height: label.paintedHeight + labelMargin * 2
+
+        anchors.centerIn: parent
 
         Text {
             id: label
