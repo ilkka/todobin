@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 1.0
 import "./Components"
 import "qmlprivate.js" as P
 import "app.js" as Applib
