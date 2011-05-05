@@ -1,10 +1,16 @@
 #include "settings.h"
 
 Settings::Settings(QObject *parent) :
-    QSettings("ilkkalaukkanen", "RTMApp", parent)
+    QObject(parent), m_storage("ilkkalaukkanen", "RTMApp", this)
 {
 }
 
-const QString Settings::CFG_KEY_APIKEY = "foursquare/apikey";
-const QString Settings::CFG_KEY_SECRET = "foursquare/secret";
-const QString Settings::CFG_KEY_ENDPOINT = "foursquare/endpoint";
+QVariant Settings::value(const QString &key) const
+{
+    return m_storage.value(key);
+}
+
+void Settings::setValue(const QString &key, QVariant value)
+{
+    m_storage.setValue(key, value);
+}
