@@ -30,13 +30,13 @@ Item {
         gradient: Gradient {
             GradientStop {
                 id: lightside
-                position: 0.00;
-                color: "#eeeeee";
+                position: 0.00
+                color: "#eeeeee"
             }
             GradientStop {
                 id: darkside
-                position: 1.00;
-                color: "#afafaf";
+                position: 1.00
+                color: "#afafaf"
             }
         }
 
@@ -45,6 +45,21 @@ Item {
         height: label.paintedHeight + labelMargin * 2
 
         anchors.centerIn: parent
+
+        states: [
+            State {
+                name: "down"
+                when: hotspot.pressed
+                PropertyChanges {
+                    target: lightside
+                    position: 1.00
+                }
+                PropertyChanges {
+                    target: darkside
+                    position: 0.00
+                }
+            }
+        ]
 
         Text {
             id: label
