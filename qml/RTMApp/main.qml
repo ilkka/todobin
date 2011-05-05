@@ -13,6 +13,10 @@ Flipable {
         axis.y: 1
         axis.z: 0
         angle: 0
+
+        Behavior on angle {
+            NumberAnimation { target: rotation; property: "angle"; duration: 200 }
+        }
     }
 
     states: [
