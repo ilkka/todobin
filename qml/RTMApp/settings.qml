@@ -10,7 +10,21 @@ Rectangle {
         anchors.fill: parent
 
         TextField {
+            anchors.left: parent.left
+            anchors.right: parent.right
             hint: "API key"
+        }
+
+        TextField {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            hint: "Secret"
+        }
+
+        TextField {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            hint: "Endpoint"
         }
     }
 }
