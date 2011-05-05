@@ -39,5 +39,6 @@ Flipable {
     }
 
     back: SettingsView {
+        onSettingsDone: root.state = "front"
     }
 }
