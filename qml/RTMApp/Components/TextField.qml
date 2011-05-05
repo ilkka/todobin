@@ -54,11 +54,5 @@ Widget {
 
         // This trick from Qt Components
         property variant model: Text { text: field.text; visible: false }
-
-        onFocusChanged: {
-            if (!field.focus && field.text.length == 0) {
-                hintview.visible = true
-            }
-        }
     }
 }
