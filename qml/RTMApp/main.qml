@@ -5,6 +5,35 @@ Flipable {
     width: 360
     height: 360
 
-    front: TaskView {}
-    back: SettingsView {}
+    transform: Rotation {
+        id: rotation
+        origin.x: root.width / 2
+        origin.y: root.height / 2
+        axis.x: 0
+        axis.y: 1
+        axis.z: 0
+        angle: 0
+    }
+
+    states: [
+        State {
+            name: "front"
+        },
+        State {
+            name: "back"
+            PropertyChanges {
+                target: rotation
+                angle: 180
+            }
+        }
+    ]
+
+    state: "front"
+
+    front: TaskView {
+        onRequestSettingsView: root.state = "back"
+    }
+
+    back: SettingsView {
+    }
 }
