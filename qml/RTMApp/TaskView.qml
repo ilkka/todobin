@@ -1,7 +1,7 @@
 import QtQuick 1.0
 import "./Components"
 import "qmlprivate.js" as P
-import "app.js" as Applib
+import "app.js" as App
 
 Column {
     id: root
@@ -12,7 +12,7 @@ Column {
     Button {
         label: "Test if we're logged in"
         onClicked: {
-            P.priv(root).app.test_login();
+            App.test_login();
         }
     }
 
@@ -27,8 +27,7 @@ Column {
     }
 
     Component.onCompleted: {
-        P.priv(root).app = Applib.init(settings)
-        if (settings.apikey.length === 0 || settings.secret.length === 0) {
+        if (settings.value("foursquare/apikey").length === 0 || settings.value("foursquare/secret").length === 0) {
             root.requestSettingsView()
         }
     }

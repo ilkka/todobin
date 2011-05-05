@@ -16,7 +16,6 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             hint: "API key"
-            text: settings.apikey
         }
 
         TextField {
@@ -24,7 +23,6 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             hint: "Secret"
-            text: settings.secret
         }
 
         TextField {
@@ -32,22 +30,22 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             hint: "Endpoint"
-            text: settings.endpoint
         }
 
         Button {
             label: "Save"
             onClicked: {
-                settings.apikey = apikeyfield.text
-                settings.secret = secretfield.text
-                settings.endpoint = endpointfield.text
+                settings.setValue("foursquare/apikey", apikeyfield.text)
+                settings.setValue("foursquare/secret", secretfield.text)
+                settings.setValue("foursquare/endpoint", endpointfield.text)
                 root.settingsDone()
             }
         }
+    }
 
-        Button {
-            label: "Exit"
-            onClicked: Qt.quit();
-        }
+    Component.onCompleted: {
+        apikeyfield.text = settings.value("foursquare/apikey")
+        secretfield.text = settings.value("foursquare/secret")
+        endpointfield.text = settings.value("foursquare/endpoint")
     }
 }

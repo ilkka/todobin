@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     Settings settings;
 
     // Hardcode endpoint URL here
-    settings.setEndpoint(QUrl("http://api.rememberthemilk.com/services/rest/"));
+    settings.setValue("foursquare/endpoint", QUrl("http://api.rememberthemilk.com/services/rest/"));
 
     QmlApplicationViewer viewer;
     viewer.rootContext()->setContextProperty("settings", &settings);
