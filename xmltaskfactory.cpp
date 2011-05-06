@@ -48,8 +48,9 @@ void XmlTaskFactory::attribute(const QXmlName &/*name*/, const QStringRef &/*val
 {
 }
 
-void XmlTaskFactory::characters(const QStringRef &/*value*/)
+void XmlTaskFactory::characters(const QStringRef &value)
 {
+    d->currentStringRef = value;
 }
 
 void XmlTaskFactory::comment(const QString &/*value*/)
