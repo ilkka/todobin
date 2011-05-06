@@ -21,7 +21,7 @@ DEFINES += QMLJSDEBUGGER
 # CONFIG += mobility
 # MOBILITY +=
 
-QT += xml
+QT += xmlpatterns
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \

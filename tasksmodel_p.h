@@ -1,12 +1,12 @@
 #ifndef TASKSMODEL_P_H
 #define TASKSMODEL_P_H
 
-#include <QDomDocument>
+#include <QStringList>
 
 class TasksModelPrivate
 {
 public:
-    QDomDocument* doc;
+    QStringList result;
 };
 
 #endif // TASKSMODEL_P_H
