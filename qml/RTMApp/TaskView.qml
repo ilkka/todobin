@@ -1,6 +1,6 @@
 import QtQuick 1.0
 import "./Components"
-import "qmlprivate.js" as P
+import "./dummydata"
 import "app.js" as App
 
 Rectangle {
