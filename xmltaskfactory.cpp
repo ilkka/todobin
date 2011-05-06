@@ -12,6 +12,11 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     query.evaluateTo(this);
 }
 
+QList<Task*> XmlTaskFactory::tasks() const
+{
+    return m_tasks;
+}
+
 void XmlTaskFactory::atomicValue(const QVariant &value)
 {
 }
