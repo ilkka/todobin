@@ -28,6 +28,12 @@ public:
       */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+public slots:
+    /**
+     * Add a new task to the model.
+     */
+    void addTask(Task* t);
+
 private:
     friend class TasksModelPrivate;
     TasksModelPrivate* const d;

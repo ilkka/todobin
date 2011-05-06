@@ -50,3 +50,10 @@ QVariant TasksModel::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
+
+void TasksModel::addTask(Task *t)
+{
+    beginInsertRows(QModelIndex(), d->tasks.length(), d->tasks.length());
+    d->tasks << t;
+    endInsertRows();
+}
