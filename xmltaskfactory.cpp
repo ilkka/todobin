@@ -58,15 +58,15 @@ void XmlTaskFactory::comment(const QString &/*value*/)
 
 void XmlTaskFactory::endDocument()
 {
+}
+
+void XmlTaskFactory::endElement()
+{
     QString localname = d->currentElementName.localName(d->query.namePool());
     qDebug() << "Leave element" << localname;
     if (localname == "taskseries") {
         emit leaveTaskseriesElement();
     }
-}
-
-void XmlTaskFactory::endElement()
-{
 }
 
 void XmlTaskFactory::endOfSequence()
