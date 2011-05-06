@@ -11,6 +11,7 @@ class XmlTaskFactoryPrivate
 public:
     QXmlQuery query;
     QList<Task*> tasks;
+    Task* currentTask;
 };
 
 #endif // XMLTASKFACTORY_P_H
