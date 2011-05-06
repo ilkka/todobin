@@ -59,7 +59,17 @@ void XmlTaskFactory::startDocument()
 
 void XmlTaskFactory::startElement(const QXmlName &name)
 {
-    qDebug() << "Hit element" << name.localName(m_query.namePool());
+    QString localname = name.localName(m_query.namePool());
+    qDebug() << "Hit element" << localname;
+    if (localname == "taskseries") {
+        // taskseries is something of a container for a single named task
+        // and all the metadata that goes with it. Why it's called a taskseries
+        // I've no clue.
+        if (d->currentTask != 0) {
+            d->tasks << d->currentTask;
+            d->currentTask = new Task();
+        }
+    }
 }
 
 void XmlTaskFactory::startOfSequence()
