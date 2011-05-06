@@ -13,7 +13,7 @@ class Task;
 class XmlTaskFactoryPrivate
 {
 public:
-    XmlTaskFactoryPrivate() : query(), tasks(), currentTask(0), sm() {}
+    XmlTaskFactoryPrivate() : currentTask(0) {}
 
     QXmlQuery query;
     Task* currentTask;

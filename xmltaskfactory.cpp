@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QtGlobal>
 
-XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
+XmlTaskFactory::XmlTaskFactory(QObject *parent) :
     QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate)
 {
     // Build statemachine:
@@ -54,16 +54,20 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     // start at root.
     d->sm.setInitialState(root);
     d->sm.start();
+}
 
+XmlTaskFactory::~XmlTaskFactory()
+
+{
+    delete d;
+}
+
+void XmlTaskFactory::setSource(QIODevice *source)
+{
     // Build and evaluate query
     d->query.bindVariable("input", source);
     d->query.setQuery("doc($input)/rsp/tasks/list/taskseries");
     d->query.evaluateTo(this);
-}
-
-XmlTaskFactory::~XmlTaskFactory()
-{
-    delete d;
 }
 
 void XmlTaskFactory::atomicValue(const QVariant &/*value*/)

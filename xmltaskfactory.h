@@ -18,8 +18,16 @@ class XmlTaskFactory : public QObject, QAbstractXmlReceiver
 {
     Q_OBJECT
 public:
-    explicit XmlTaskFactory(QIODevice *source, QObject *parent = 0);
+    explicit XmlTaskFactory(QObject *parent = 0);
     virtual ~XmlTaskFactory();
+
+    /**
+     * Set XML source for reading tasks.
+     * This will cause the factory to start emitting tasks so make
+     * sure something's connected to XmlTaskFactory::newTask.
+     * @param source IO device for reading XML from.
+     */
+    void setSource(QIODevice *source);
 
 signals:
     /**

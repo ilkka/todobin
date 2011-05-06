@@ -5,6 +5,8 @@
 
 class TasksModelPrivate;
 
+class Task;
+
 class TasksModel : public QAbstractListModel
 {
     Q_OBJECT
