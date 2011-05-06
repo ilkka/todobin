@@ -3,12 +3,27 @@ import "./Components"
 import "qmlprivate.js" as P
 import "app.js" as App
 
-Column {
+Rectangle {
     id: root
+    width: 200
+    height: 200
 
     signal requestSettingsView
 
+    ListView {
+        anchors.top: parent.top
+        anchors.bottom: controls.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        clip: true
+
+        model: TasksModel {}
+        delegate: Text { text: title }
+    }
+
     Row {
+        id: controls
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
