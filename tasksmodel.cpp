@@ -1,9 +1,8 @@
 #include "tasksmodel.h"
 #include "tasksmodel_p.h"
+#include "xmltaskfactory.h"
 
 #include <QFile>
-#include <QXmlQuery>
-#include <QXmlResultItems>
 
 TasksModel::TasksModel(QObject *parent) :
     QAbstractListModel(parent), d(new TasksModelPrivate)
@@ -13,22 +12,8 @@ TasksModel::TasksModel(QObject *parent) :
     if (!f.open(QIODevice::ReadOnly)) {
         throw "Can't open XML file";
     }
-
-    // Build and evaluate query
-    QXmlQuery query;
-    query.bindVariable("input", &f);
-    query.setQuery("doc($input)/rsp/tasks/list/taskseries/@name/string()");
-    QXmlResultItems result;
-    query.evaluateTo(&result);
-
-    // Put the results in the model
-    QXmlItem item(result.next());
-    while (!item.isNull()) {
-        d->result << item.toAtomicValue().toString();
-        item = result.next();
-    }
-
-    f.close();
+    XmlTaskFactory factory(&f);
+    d->tasks = factory.tasks();
 
     // Set roles
     QHash<int, QByteArray> roles;
