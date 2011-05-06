@@ -62,7 +62,7 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
 
 void XmlTaskFactory::characters(const QStringRef &value)
 {
-    d->currentStringRef = value;
+    d->lastTextNodeContents = value.toString();
 }
 
 void XmlTaskFactory::comment(const QString &/*value*/)
@@ -132,5 +132,5 @@ void XmlTaskFactory::finishCreateTask()
 
 void XmlTaskFactory::addTagToCurrentTask()
 {
-    qDebug() << "Would add tag" << d->currentStringRef.toString() << "to task" << d->currentTask->title();
+    qDebug() << "Would add tag" << d->lastTextNodeContents << "to task" << d->currentTask->title();
 }

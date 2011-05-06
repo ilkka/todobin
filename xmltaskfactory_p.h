@@ -5,7 +5,7 @@
 #include <QList>
 #include <QStateMachine>
 #include <QState>
-#include <QStringRef>
+#include <QString>
 #include <QXmlName>
 
 class Task;
@@ -19,7 +19,7 @@ public:
     QList<Task*> tasks;
     Task* currentTask;
     QStateMachine sm;
-    QStringRef currentStringRef;
+    QString lastTextNodeContents;
     QXmlName currentElementName;
 };
 
