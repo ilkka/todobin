@@ -3,7 +3,7 @@
 #include <QXmlQuery>
 
 XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
-    QAbstractXmlReceiver(parent)
+    QObject(parent), QAbstractXmlReceiver(), m_query()
 {
     // Build and evaluate query
     QXmlQuery query;

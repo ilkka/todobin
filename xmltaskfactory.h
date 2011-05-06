@@ -11,7 +11,7 @@ class Task;
  * The idea is to create an instance of this class, give it RTM XML
  * and extract the tasks.
  */
-class XmlTaskFactory : public QAbstractXmlReceiver
+class XmlTaskFactory : public QObject, QAbstractXmlReceiver
 {
     Q_OBJECT
 public:
