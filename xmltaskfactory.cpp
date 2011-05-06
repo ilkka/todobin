@@ -39,7 +39,7 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     in_task->addTransition(this, SIGNAL(leaveCurrentElement()), taskseries_root);
     // from tags we go into tag children
     in_tags->addTransition(this, SIGNAL(enterTagElement()), in_tag);
-    in_tag->addTransition(this, SIGNAL(leaveCurrentElement()), in_tag);
+    in_tag->addTransition(this, SIGNAL(leaveCurrentElement()), in_tags);
     // leaving tag adds the last seen text node as a tag to the current task
     connect(in_tag, SIGNAL(exited()), SLOT(addTagToCurrentTask()));
     // from participants into contacts and back
