@@ -10,13 +10,6 @@ Column {
     signal requestSettingsView
 
     Button {
-        label: "Test if we're logged in"
-        onClicked: {
-            App.test_login();
-        }
-    }
-
-    Button {
         label: "Quit"
         onClicked: Qt.quit()
     }
@@ -24,11 +17,5 @@ Column {
     Button {
         label: "Settings"
         onClicked: root.requestSettingsView()
-    }
-
-    Component.onCompleted: {
-        if (settings.value("foursquare/apikey").length === 0 || settings.value("foursquare/secret").length === 0) {
-            root.requestSettingsView()
-        }
     }
 }
