@@ -4,7 +4,7 @@
 #include <QDebug>
 
 XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
-    QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate), m_state(AtRoot)
+    QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate)
 {
     // Build statemachine:
     QState *root = new QState();
@@ -13,11 +13,8 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     QState *in_tag = new QState();
     root->addTransition(this, SIGNAL(enterTaskseriesElement()), in_taskseries);
     in_taskseries->addTransition(this, SIGNAL(enterTagsElement()), in_tags);
-    in_taskseries->assignProperty(this, "state", InTaskseries);
     in_tags->addTransition(this, SIGNAL(enterTagElement()), in_tag);
-    in_tags->assignProperty(this, "state", InTags);
     in_tag->addTransition(this, SIGNAL(leaveTagElement()), in_tag);
-    in_tag->assignProperty(this, "state", InTag);
     in_tags->addTransition(this, SIGNAL(leaveTagsElement()), in_taskseries);
     in_taskseries->addTransition(this, SIGNAL(leaveTaskseriesElement()), root);
     d->sm.addState(root);
