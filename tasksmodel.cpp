@@ -29,7 +29,10 @@ TasksModel::~TasksModel()
 
 int TasksModel::rowCount(const QModelIndex &parent) const
 {
-    return 0;
+    if (parent.isValid()) {
+        return 0;
+    }
+    return 1;
 }
 
 QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int role) const
