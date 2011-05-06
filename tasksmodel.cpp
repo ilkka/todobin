@@ -11,7 +11,7 @@ TasksModel::TasksModel(QObject *parent) :
     QFile f("qml/RTMApp/dummydata/all_tasks_response.xml");
     if (!f.open(QIODevice::ReadOnly)) {
         throw "Can't open XML file";
-    } else if(!d->doc->setContent(&file)) {
+    } else if(!d->doc->setContent(&f)) {
         throw "Can't set document content";
     }
     f.close();
