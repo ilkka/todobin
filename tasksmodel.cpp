@@ -6,6 +6,7 @@
 TasksModel::TasksModel(QObject *parent) :
     QAbstractListModel(parent), d(new TasksModelPrivate)
 {
+    // Read dummydata doc
     d->doc = new QDomDocument;
     QFile f("qml/RTMApp/dummydata/all_tasks_response.xml");
     if (!f.open(QIODevice::ReadOnly)) {
@@ -14,6 +15,11 @@ TasksModel::TasksModel(QObject *parent) :
         throw "Can't set document content";
     }
     f.close();
+
+    // Set roles
+    QHash<int, QByteArray> roles;
+    roles[TitleRole] = "title";
+    setRoleNames(roles);
 }
 
 TasksModel::~TasksModel()
