@@ -2,6 +2,7 @@
 #include "xmltaskfactory_p.h"
 
 #include <QDebug>
+#include <QtGlobal>
 
 XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate)
@@ -105,13 +106,13 @@ void XmlTaskFactory::startOfSequence()
 
 void XmlTaskFactory::startCreateTask()
 {
-    assert(d->currentTask == 0);
+    Q_ASSERT_X(d->currentTask == 0, "XmlTaskFactory::startCreateTask", "Current task shouldn't exist");
     d->currentTask = new Task();
 }
 
 void XmlTaskFactory::finishCreateTask()
 {
-    assert(d->currentTask != 0);
+    Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::finishCreateTask", "No current task");
     d->tasks << d->currentTask;
     d->currentTask = 0;
 }
