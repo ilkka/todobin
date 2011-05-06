@@ -19,6 +19,7 @@ class XmlTaskFactory : public QObject, QAbstractXmlReceiver
     Q_OBJECT
 public:
     explicit XmlTaskFactory(QIODevice *source, QObject *parent = 0);
+    virtual ~XmlTaskFactory();
 
     /**
      * Get the tasks constructed by this factory.

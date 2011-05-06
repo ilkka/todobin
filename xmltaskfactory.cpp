@@ -12,6 +12,11 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     d->query.evaluateTo(this);
 }
 
+virtual XmlTaskFactory::~XmlTaskFactory()
+{
+    delete d;
+}
+
 QList<Task*> XmlTaskFactory::tasks() const
 {
     return d->tasks;
