@@ -16,7 +16,7 @@ public:
     // setters
     void setTitle(const QString& title) {
         if (title != m_title) {
-            title = m_title;
+            m_title = title;
             emit titleChanged();
         }
     }
