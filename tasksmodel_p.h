@@ -1,12 +1,14 @@
 #ifndef TASKSMODEL_P_H
 #define TASKSMODEL_P_H
 
-#include <QStringList>
+#include <QList>
+
+class Task;
 
 class TasksModelPrivate
 {
 public:
-    QStringList result;
+    QList<Task*> tasks;
 };
 
 #endif // TASKSMODEL_P_H

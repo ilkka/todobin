@@ -31,7 +31,7 @@ int TasksModel::rowCount(const QModelIndex &parent) const
     if (parent.isValid()) {
         return 0;
     }
-    return d->result.length();
+    return 5;
 }
 
 QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -45,7 +45,7 @@ QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int ro
 QVariant TasksModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid() && role == TitleRole) {
-        return d->result.at(index.row());
+        return QVariant(QString("Moro %1").arg(index.row()));
     }
     return QVariant();
 }
