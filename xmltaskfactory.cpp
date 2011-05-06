@@ -11,21 +11,47 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     // Build statemachine:
     QState *root = new QState();
     QState *in_taskseries = new QState();
-    QState *in_tags = new QState();
-    QState *in_tag = new QState();
-    root->addTransition(this, SIGNAL(enterTaskseriesElement()), in_taskseries);
-    in_taskseries->addTransition(this, SIGNAL(enterTagsElement()), in_tags);
-    connect(in_taskseries, SIGNAL(entered()), SLOT(startCreateTask()));
-    connect(in_taskseries, SIGNAL(exited()), SLOT(finishCreateTask()));
-    in_tags->addTransition(this, SIGNAL(enterTagElement()), in_tag);
-    in_tag->addTransition(this, SIGNAL(leaveTagElement()), in_tag);
-    connect(in_tag, SIGNAL(exited()), SLOT(addTagToCurrentTask()));
-    in_tags->addTransition(this, SIGNAL(leaveTagsElement()), in_taskseries);
-    in_taskseries->addTransition(this, SIGNAL(leaveTaskseriesElement()), root);
+    QState *taskseries_root = new QState(in_taskseries);
+    QState *in_tags = new QState(in_taskseries);
+    QState *in_tag = new QState(in_taskseries);
+    QState *in_participants = new QState(in_taskseries);
+    QState *in_contact = new QState(in_taskseries);
+    QState *in_notes = new QState(in_taskseries);
+    QState *in_note = new QState(in_taskseries);
+    QState *in_task = new QState(in_taskseries);
     d->sm.addState(root);
     d->sm.addState(in_taskseries);
-    d->sm.addState(in_tags);
-    d->sm.addState(in_tag);
+    in_taskseries->setInitialState(taskseries_root);
+
+    // from root we can go in taskseries
+    root->addTransition(this, SIGNAL(enterTaskseriesElement()), in_taskseries);
+    // taskseries entry controls task instance creation
+    connect(in_taskseries, SIGNAL(entered()), SLOT(startCreateTask()));
+    connect(in_taskseries, SIGNAL(exited()), SLOT(finishCreateTask()));
+    // from taskseries we enter any of a number of child nodes and back again
+    taskseries_root->addTransition(this, SIGNAL(enterTagsElement()), in_tags);
+    in_tags->addTransition(this, SIGNAL(leaveCurrentElement()), taskseries_root);
+    taskseries_root->addTransition(this, SIGNAL(enterNotesElement()), in_notes);
+    in_notes->addTransition(this, SIGNAL(leaveCurrentElement()), taskseries_root);
+    taskseries_root->addTransition(this, SIGNAL(enterParticipantsElement()), in_participants);
+    in_participants->addTransition(this, SIGNAL(leaveCurrentElement()), taskseries_root);
+    taskseries_root->addTransition(this, SIGNAL(enterTaskElement()), in_task);
+    in_task->addTransition(this, SIGNAL(leaveCurrentElement()), taskseries_root);
+    // from tags we go into tag children
+    in_tags->addTransition(this, SIGNAL(enterTagElement()), in_tag);
+    in_tag->addTransition(this, SIGNAL(leaveCurrentElement()), in_tag);
+    // leaving tag adds the last seen text node as a tag to the current task
+    connect(in_tag, SIGNAL(exited()), SLOT(addTagToCurrentTask()));
+    // from participants into contacts and back
+    in_participants->addTransition(this, SIGNAL(enterContactElement()), in_contact);
+    in_contact->addTransition(this, SIGNAL(leaveCurrentElement()), in_participants);
+    // from notes into note and back
+    in_notes->addTransition(this, SIGNAL(enterNoteElement()), in_note);
+    in_note->addTransition(this, SIGNAL(leaveCurrentElement()), in_notes);
+    // leaving taskseries takes us back to root
+    taskseries_root->addTransition(this, SIGNAL(leaveCurrentElement()), root);
+
+    // start at root.
     d->sm.setInitialState(root);
     d->sm.start();
 
@@ -75,11 +101,8 @@ void XmlTaskFactory::endDocument()
 
 void XmlTaskFactory::endElement()
 {
-    QString localname = d->currentElementName.localName(d->query.namePool());
-    qDebug() << "Leave element" << localname;
-    if (localname == "taskseries") {
-        emit leaveTaskseriesElement();
-    }
+    qDebug() << "End current element";
+    emit leaveCurrentElement();
 }
 
 void XmlTaskFactory::endOfSequence()
@@ -108,6 +131,20 @@ void XmlTaskFactory::startElement(const QXmlName &name)
         // and all the metadata that goes with it. Why it's called a taskseries
         // I've no clue.
         emit enterTaskseriesElement();
+    } else if (localname == "tags") {
+        emit enterTagsElement();
+    } else if (localname == "tag") {
+        emit enterTagElement();
+    } else if (localname == "participants") {
+        emit enterParticipantsElement();
+    } else if (localname == "contact") {
+        emit enterContactElement();
+    } else if (localname == "notes") {
+        emit enterNotesElement();
+    } else if (localname == "note") {
+        emit enterNoteElement();
+    } else if (localname == "task") {
+        emit enterTaskElement();
     }
 }
 

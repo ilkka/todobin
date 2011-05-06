@@ -30,11 +30,14 @@ public:
 
 signals:
     void enterTaskseriesElement();
-    void leaveTaskseriesElement();
     void enterTagsElement();
-    void leaveTagsElement();
     void enterTagElement();
-    void leaveTagElement();
+    void enterParticipantsElement();
+    void enterContactElement();
+    void enterNotesElement();
+    void enterNoteElement();
+    void enterTaskElement();
+    void leaveCurrentElement();
 
 private slots:
     void startCreateTask();
