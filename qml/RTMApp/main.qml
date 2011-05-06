@@ -2,8 +2,8 @@ import QtQuick 1.0
 
 Flipable {
     id: root
-    width: 360
-    height: 360
+    width: 400
+    height: 400
 
     transform: Rotation {
         id: rotation
@@ -35,10 +35,12 @@ Flipable {
     state: "front"
 
     front: TaskView {
+        anchors.fill: parent
         onRequestSettingsView: root.state = "back"
     }
 
     back: SettingsView {
+        anchors.fill: parent
         onSettingsDone: root.state = "front"
     }
 }
