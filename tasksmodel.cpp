@@ -1,6 +1,7 @@
 #include "tasksmodel.h"
 #include "tasksmodel_p.h"
 #include "xmltaskfactory.h"
+#include "task.h"
 
 #include <QFile>
 
@@ -31,7 +32,7 @@ int TasksModel::rowCount(const QModelIndex &parent) const
     if (parent.isValid()) {
         return 0;
     }
-    return 5;
+    return d->tasks.length();
 }
 
 QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -45,7 +46,7 @@ QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int ro
 QVariant TasksModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid() && role == TitleRole) {
-        return QVariant(QString("Moro %1").arg(index.row()));
+        return QVariant(d->tasks.at(index.row())->title());
     }
     return QVariant();
 }
