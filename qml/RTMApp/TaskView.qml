@@ -1,6 +1,5 @@
 import QtQuick 1.0
 import "./Components"
-import "./dummydata"
 import "app.js" as App
 
 Rectangle {
@@ -18,7 +17,7 @@ Rectangle {
 
         clip: true
 
-        model: TasksModel {}
+        model: tasksModel
         delegate: Text { text: title }
     }
 
