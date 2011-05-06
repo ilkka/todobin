@@ -45,5 +45,8 @@ QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant TasksModel::data(const QModelIndex &index, int role) const
 {
+    if (index.isValid() && role == TitleRole) {
+        return QString("Task number {0}").arg(index.row());
+    }
     return QVariant();
 }
