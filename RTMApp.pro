@@ -24,7 +24,8 @@ DEFINES += QMLJSDEBUGGER
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     settings.cpp \
-    rtminterface.cpp
+    rtminterface.cpp \
+    tasksmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -32,4 +33,5 @@ qtcAddDeployment()
 
 HEADERS += \
     settings.h \
-    rtminterface.h
+    rtminterface.h \
+    tasksmodel.h
