@@ -33,7 +33,7 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     d->query.evaluateTo(this);
 }
 
-virtual XmlTaskFactory::~XmlTaskFactory()
+XmlTaskFactory::~XmlTaskFactory()
 {
     delete d;
 }
