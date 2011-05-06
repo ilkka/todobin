@@ -1,5 +1,6 @@
 #include "xmltaskfactory.h"
 #include "xmltaskfactory_p.h"
+#include "task.h"
 
 #include <QDebug>
 #include <QtGlobal>
@@ -45,8 +46,15 @@ void XmlTaskFactory::atomicValue(const QVariant &/*value*/)
 {
 }
 
-void XmlTaskFactory::attribute(const QXmlName &/*name*/, const QStringRef &/*value*/)
+void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
 {
+    QString attributeName = name.localName(d->query.namePool());
+    QString nodeName = d->currentElementName.localName(d->query.namePool());
+    qDebug() << "Hit attribute" << attributeName << "in" << nodeName;
+    if (nodeName == "taskseries" && attributeName == "name") {
+        Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
+        d->currentTask->setTitle(value.toString());
+    }
 }
 
 void XmlTaskFactory::characters(const QStringRef &value)
