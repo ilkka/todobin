@@ -7,6 +7,7 @@
 #include "settings.h"
 #include "tasksmodel.h"
 #include "xmltaskfactory.h"
+#include "rtminterface.h"
 
 int main(int argc, char *argv[])
 {
@@ -27,9 +28,12 @@ int main(int argc, char *argv[])
     QObject::connect(&factory, SIGNAL(newTask(Task*)), &model, SLOT(addTask(Task*)));
     factory.setSource(&f);
 
+    RTMInterface api;
+
     QmlApplicationViewer viewer;
     viewer.rootContext()->setContextProperty("settings", &settings);
     viewer.rootContext()->setContextProperty("tasksModel", &model);
+    viewer.rootContext()->setContextProperty("api", &api);
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setMainQmlFile(QLatin1String("qml/RTMApp/main.qml"));
     viewer.showExpanded();
