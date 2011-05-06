@@ -2,10 +2,10 @@
 #define XMLTASKFACTORY_H
 
 #include <QAbstractXmlReceiver>
-#include <QList>
-#include <QXmlQuery>
 
 class Task;
+
+class XmlTaskFactoryPrivate;
 
 /**
  * Use this class to create tasks from RTM task XML.
@@ -35,8 +35,8 @@ private:
     void startElement(const QXmlName &name);
     void startOfSequence();
 
-    QXmlQuery m_query;
-    QList<Task*> m_tasks;
+    friend class XmlTaskFactoryPrivate;
+    XmlTaskFactoryPrivate* const d;
 };
 
 #endif // XMLTASKFACTORY_H

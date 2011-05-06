@@ -1,19 +1,20 @@
 #include "xmltaskfactory.h"
+#include "xmltaskfactory_p.h"
 
 #include <QDebug>
 
 XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
-    QObject(parent), QAbstractXmlReceiver(), m_query()
+    QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate)
 {
     // Build and evaluate query
-    m_query.bindVariable("input", source);
-    m_query.setQuery("doc($input)/rsp/tasks/list/taskseries");
-    m_query.evaluateTo(this);
+    d->query.bindVariable("input", source);
+    d->query.setQuery("doc($input)/rsp/tasks/list/taskseries");
+    d->query.evaluateTo(this);
 }
 
 QList<Task*> XmlTaskFactory::tasks() const
 {
-    return m_tasks;
+    return d->tasks;
 }
 
 void XmlTaskFactory::atomicValue(const QVariant &value)

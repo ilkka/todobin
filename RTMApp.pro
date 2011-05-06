@@ -41,4 +41,5 @@ HEADERS += \
     tasksmodel.h \
     tasksmodel_p.h \
     xmltaskfactory.h \
-    task.h
+    task.h \
+    xmltaskfactory_p.h
