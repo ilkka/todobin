@@ -4,8 +4,29 @@
 #include <QDebug>
 
 XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
-    QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate)
+    QObject(parent), QAbstractXmlReceiver(), d(new XmlTaskFactoryPrivate), m_state(AtRoot)
 {
+    // Build statemachine:
+    QState *root = new QState();
+    QState *in_taskseries = new QState();
+    QState *in_tags = new QState();
+    QState *in_tag = new QState();
+    root->addTransition(this, SIGNAL(enterTaskseriesElement()), in_taskseries);
+    in_taskseries->addTransition(this, SIGNAL(enterTagsElement()), in_tags);
+    in_taskseries->assignProperty(this, "state", InTaskseries);
+    in_tags->addTransition(this, SIGNAL(enterTagElement()), in_tag);
+    in_tags->assignProperty(this, "state", InTags);
+    in_tag->addTransition(this, SIGNAL(leaveTagElement()), in_tag);
+    in_tag->assignProperty(this, "state", InTag);
+    in_tags->addTransition(this, SIGNAL(leaveTagsElement()), in_taskseries);
+    in_taskseries->addTransition(this, SIGNAL(leaveTaskseriesElement()), root);
+    d->sm.addState(root);
+    d->sm.addState(in_taskseries);
+    d->sm.addState(in_tags);
+    d->sm.addState(in_tag);
+    d->sm.setInitialState(root);
+    d->sm.start();
+
     // Build and evaluate query
     d->query.bindVariable("input", source);
     d->query.setQuery("doc($input)/rsp/tasks/list/taskseries");
@@ -85,3 +106,7 @@ void XmlTaskFactory::startOfSequence()
 {
 }
 
+XmlTaskFactory::FactoryState XmlTaskFactory::state() const
+{
+    return d->state;
+}

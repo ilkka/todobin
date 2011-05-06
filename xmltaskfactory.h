@@ -17,6 +17,8 @@ class XmlTaskFactoryPrivate;
 class XmlTaskFactory : public QObject, QAbstractXmlReceiver
 {
     Q_OBJECT
+    Q_ENUMS(FactoryState)
+    Q_PROPERTY(FactoryState state READ state WRITE setState NOTIFY stateChanged)
 public:
     explicit XmlTaskFactory(QIODevice *source, QObject *parent = 0);
     virtual ~XmlTaskFactory();
@@ -27,6 +29,16 @@ public:
      * @note it is the caller's responsibility to free the tasks!
      */
     QList<Task*> tasks() const;
+
+signals:
+    void enterTaskseriesElement();
+    void leaveTaskseriesElement();
+    void enterTagsElement();
+    void leaveTagsElement();
+    void enterTagElement();
+    void leaveTagElement();
+
+    void stateChanged();
 
 private:
     // implemented abstract methods from QAbstractXmlReceiver
@@ -45,6 +57,30 @@ private:
 
     friend class XmlTaskFactoryPrivate;
     XmlTaskFactoryPrivate* const d;
+
+    /**
+     * Enumerated type for tracking factory state. For internal use.
+     */
+    enum FactoryState {
+        AtRoot, InTaskseries, InTags, InTag
+    };
+
+    /**
+     * Get current factory state.
+     */
+    FactoryState state() const { return m_state; }
+
+    /**
+     * Set current factory state.
+     */
+    void setState(FactoryState state) {
+        if (state != m_state) {
+            m_state = state;
+            emit stateChanged();
+        }
+    }
+
+    FactoryState m_state;
 };
 
 #endif // XMLTASKFACTORY_H
