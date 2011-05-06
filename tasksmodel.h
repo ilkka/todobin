@@ -3,16 +3,34 @@
 
 #include <QAbstractListModel>
 
+class TasksModelPrivate;
+
 class TasksModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    enum TaskRoles {
+        TitleRole = Qt::UserRole + 1
+    };
+
     explicit TasksModel(QObject *parent = 0);
+    virtual ~TasksModel();
 
-signals:
+    /** @see QAbstractListModel::rowCount
+      */
+    int rowCount(const QModelIndex &parent) const;
 
-public slots:
+    /** @see QAbstractListModel::data
+      */
+    QVariant data(const QModelIndex &index, int role) const;
 
+    /** @see QAbstractListModel::headerData
+      */
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+private:
+    friend class TasksModelPrivate;
+    TasksModelPrivate* const d;
 };
 
 #endif // TASKSMODEL_H

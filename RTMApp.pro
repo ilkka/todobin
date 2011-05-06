@@ -36,4 +36,5 @@ qtcAddDeployment()
 HEADERS += \
     settings.h \
     rtminterface.h \
-    tasksmodel.h
+    tasksmodel.h \
+    tasksmodel_p.h
