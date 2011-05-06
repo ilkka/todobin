@@ -43,11 +43,11 @@ QList<Task*> XmlTaskFactory::tasks() const
     return d->tasks;
 }
 
-void XmlTaskFactory::atomicValue(const QVariant &value)
+void XmlTaskFactory::atomicValue(const QVariant &/*value*/)
 {
 }
 
-void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
+void XmlTaskFactory::attribute(const QXmlName &/*name*/, const QStringRef &/*value*/)
 {
 }
 
