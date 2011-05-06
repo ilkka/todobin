@@ -9,6 +9,8 @@ class Task;
 class XmlTaskFactoryPrivate
 {
 public:
+    XmlTaskFactoryPrivate() : query(), tasks(), currentTask(0) {}
+
     QXmlQuery query;
     QList<Task*> tasks;
     Task* currentTask;
