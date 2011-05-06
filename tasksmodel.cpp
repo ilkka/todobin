@@ -37,6 +37,9 @@ int TasksModel::rowCount(const QModelIndex &parent) const
 
 QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    if (role == TitleRole && orientation == Qt::Horizontal && section == 0) {
+        return QVariant("Title");
+    }
     return QVariant();
 }
 
