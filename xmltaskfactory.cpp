@@ -87,6 +87,7 @@ void XmlTaskFactory::startElement(const QXmlName &name)
 {
     QString localname = name.localName(d->query.namePool());
     qDebug() << "Hit element" << localname;
+    d->currentElementName = name;
     if (localname == "taskseries") {
         // taskseries is something of a container for a single named task
         // and all the metadata that goes with it. Why it's called a taskseries

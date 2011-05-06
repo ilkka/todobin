@@ -5,6 +5,7 @@
 #include <QList>
 #include <QStateMachine>
 #include <QState>
+#include <QXmlName>
 
 class Task;
 
@@ -17,6 +18,7 @@ public:
     QList<Task*> tasks;
     Task* currentTask;
     QStateMachine sm;
+    QXmlName currentElementName;
 };
 
 #endif // XMLTASKFACTORY_P_H
