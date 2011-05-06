@@ -1,15 +1,14 @@
 #include "xmltaskfactory.h"
 
-#include <QXmlQuery>
+#include <QDebug>
 
 XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     QObject(parent), QAbstractXmlReceiver(), m_query()
 {
     // Build and evaluate query
-    QXmlQuery query;
-    query.bindVariable("input", source);
-    query.setQuery("doc($input)/rsp/tasks/list/taskseries");
-    query.evaluateTo(this);
+    m_query.bindVariable("input", source);
+    m_query.setQuery("doc($input)/rsp/tasks/list/taskseries");
+    m_query.evaluateTo(this);
 }
 
 QList<Task*> XmlTaskFactory::tasks() const
@@ -59,6 +58,7 @@ void XmlTaskFactory::startDocument()
 
 void XmlTaskFactory::startElement(const QXmlName &name)
 {
+    qDebug() << "Hit element" << name.localName(m_query.namePool());
 }
 
 void XmlTaskFactory::startOfSequence()

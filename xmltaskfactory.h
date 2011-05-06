@@ -3,6 +3,7 @@
 
 #include <QAbstractXmlReceiver>
 #include <QList>
+#include <QXmlQuery>
 
 class Task;
 
@@ -34,6 +35,7 @@ public:
     void startOfSequence();
 
 private:
+    QXmlQuery m_query;
     QList<Task*> m_tasks;
 };
 
