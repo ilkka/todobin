@@ -8,14 +8,6 @@
 TasksModel::TasksModel(QObject *parent) :
     QAbstractListModel(parent), d(new TasksModelPrivate)
 {
-    // Open dummydata file
-    QFile f("qml/RTMApp/dummydata/all_tasks_response.xml");
-    if (!f.open(QIODevice::ReadOnly)) {
-        throw "Can't open XML file";
-    }
-    XmlTaskFactory factory(&f);
-    d->tasks = factory.tasks();
-
     // Set roles
     QHash<int, QByteArray> roles;
     roles[TitleRole] = "title";
