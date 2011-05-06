@@ -58,6 +58,11 @@ void XmlTaskFactory::comment(const QString &/*value*/)
 
 void XmlTaskFactory::endDocument()
 {
+    QString localname = d->currentElementName.localName(d->query.namePool());
+    qDebug() << "Leave element" << localname;
+    if (localname == "taskseries") {
+        emit leaveTaskseriesElement();
+    }
 }
 
 void XmlTaskFactory::endElement()
@@ -83,7 +88,7 @@ void XmlTaskFactory::startDocument()
 void XmlTaskFactory::startElement(const QXmlName &name)
 {
     QString localname = name.localName(d->query.namePool());
-    qDebug() << "Hit element" << localname;
+    qDebug() << "Enter element" << localname;
     d->currentElementName = name;
     if (localname == "taskseries") {
         // taskseries is something of a container for a single named task
