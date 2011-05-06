@@ -36,6 +36,10 @@ signals:
     void enterTagElement();
     void leaveTagElement();
 
+private slots:
+    void startCreateTask();
+    void finishCreateTask();
+    void addTagToCurrentTask();
 
 private:
     // implemented abstract methods from QAbstractXmlReceiver

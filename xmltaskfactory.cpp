@@ -101,3 +101,18 @@ void XmlTaskFactory::startElement(const QXmlName &name)
 void XmlTaskFactory::startOfSequence()
 {
 }
+
+void XmlTaskFactory::startCreateTask()
+{
+
+}
+
+void XmlTaskFactory::finishCreateTask()
+{
+
+}
+
+void XmlTaskFactory::addTagToCurrentTask()
+{
+
+}
