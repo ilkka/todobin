@@ -1,9 +1,6 @@
 #include "tasksmodel.h"
 #include "tasksmodel_p.h"
-#include "xmltaskfactory.h"
 #include "task.h"
-
-#include <QFile>
 
 TasksModel::TasksModel(QObject *parent) :
     QAbstractListModel(parent), d(new TasksModelPrivate)
