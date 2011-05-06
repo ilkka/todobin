@@ -16,7 +16,6 @@ public:
     XmlTaskFactoryPrivate() : query(), tasks(), currentTask(0), sm() {}
 
     QXmlQuery query;
-    QList<Task*> tasks;
     Task* currentTask;
     QStateMachine sm;
     QString lastTextNodeContents;

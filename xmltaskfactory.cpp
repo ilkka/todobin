@@ -66,11 +66,6 @@ XmlTaskFactory::~XmlTaskFactory()
     delete d;
 }
 
-QList<Task*> XmlTaskFactory::tasks() const
-{
-    return d->tasks;
-}
-
 void XmlTaskFactory::atomicValue(const QVariant &/*value*/)
 {
 }
@@ -156,14 +151,14 @@ void XmlTaskFactory::startCreateTask()
 {
     qDebug() << "startCreateTask";
     Q_ASSERT_X(d->currentTask == 0, "XmlTaskFactory::startCreateTask", "Current task shouldn't exist");
-    d->currentTask = new Task();
+    d->currentTask = new Task(this);
 }
 
 void XmlTaskFactory::finishCreateTask()
 {
     qDebug() << "finishCreateTask:" << d->currentTask->title();
     Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::finishCreateTask", "No current task");
-    d->tasks << d->currentTask;
+    emit newTask(d->currentTask);
     d->currentTask = 0;
 }
 

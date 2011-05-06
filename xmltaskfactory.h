@@ -21,14 +21,14 @@ public:
     explicit XmlTaskFactory(QIODevice *source, QObject *parent = 0);
     virtual ~XmlTaskFactory();
 
-    /**
-     * Get the tasks constructed by this factory.
-     * @return a list of tasks.
-     * @note it is the caller's responsibility to free the tasks!
-     */
-    QList<Task*> tasks() const;
-
 signals:
+    /**
+     * Emitted when a Task has been created.
+     * @param task the newly-created Task instance.
+     */
+    void newTask(Task* task);
+
+    // For internal use.
     void enterTaskseriesElement();
     void enterTagsElement();
     void enterTagElement();
