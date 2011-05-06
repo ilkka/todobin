@@ -61,10 +61,6 @@ void XmlTaskFactory::comment(const QString &/*value*/)
 
 void XmlTaskFactory::endDocument()
 {
-    if (d->currentTask != 0) {
-        d->tasks << d->currentTask;
-        d->currentTask = 0;
-    }
 }
 
 void XmlTaskFactory::endElement()
@@ -95,10 +91,7 @@ void XmlTaskFactory::startElement(const QXmlName &name)
         // taskseries is something of a container for a single named task
         // and all the metadata that goes with it. Why it's called a taskseries
         // I've no clue.
-        if (d->currentTask != 0) {
-            d->tasks << d->currentTask;
-            d->currentTask = new Task();
-        }
+        emit enterTaskseriesElement();
     }
 }
 
