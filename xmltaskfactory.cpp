@@ -15,8 +15,11 @@ XmlTaskFactory::XmlTaskFactory(QIODevice *source, QObject *parent) :
     QState *in_tag = new QState();
     root->addTransition(this, SIGNAL(enterTaskseriesElement()), in_taskseries);
     in_taskseries->addTransition(this, SIGNAL(enterTagsElement()), in_tags);
+    connect(in_taskseries, SIGNAL(entered()), SLOT(startCreateTask()));
+    connect(in_taskseries, SIGNAL(exited()), SLOT(finishCreateTask()));
     in_tags->addTransition(this, SIGNAL(enterTagElement()), in_tag);
     in_tag->addTransition(this, SIGNAL(leaveTagElement()), in_tag);
+    connect(in_tag, SIGNAL(exited()), SLOT(addTagToCurrentTask()));
     in_tags->addTransition(this, SIGNAL(leaveTagsElement()), in_taskseries);
     in_taskseries->addTransition(this, SIGNAL(leaveTaskseriesElement()), root);
     d->sm.addState(root);
@@ -114,12 +117,14 @@ void XmlTaskFactory::startOfSequence()
 
 void XmlTaskFactory::startCreateTask()
 {
+    qDebug() << "startCreateTask";
     Q_ASSERT_X(d->currentTask == 0, "XmlTaskFactory::startCreateTask", "Current task shouldn't exist");
     d->currentTask = new Task();
 }
 
 void XmlTaskFactory::finishCreateTask()
 {
+    qDebug() << "finishCreateTask:" << d->currentTask->title();
     Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::finishCreateTask", "No current task");
     d->tasks << d->currentTask;
     d->currentTask = 0;
@@ -127,5 +132,5 @@ void XmlTaskFactory::finishCreateTask()
 
 void XmlTaskFactory::addTagToCurrentTask()
 {
-
+    qDebug() << "Would add tag" << d->currentStringRef.toString() << "to task" << d->currentTask->title();
 }
