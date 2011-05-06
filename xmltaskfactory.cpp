@@ -104,12 +104,15 @@ void XmlTaskFactory::startOfSequence()
 
 void XmlTaskFactory::startCreateTask()
 {
-
+    assert(d->currentTask == 0);
+    d->currentTask = new Task();
 }
 
 void XmlTaskFactory::finishCreateTask()
 {
-
+    assert(d->currentTask != 0);
+    d->tasks << d->currentTask;
+    d->currentTask = 0;
 }
 
 void XmlTaskFactory::addTagToCurrentTask()
