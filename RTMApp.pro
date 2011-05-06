@@ -27,7 +27,8 @@ QT += xmlpatterns
 SOURCES += main.cpp \
     settings.cpp \
     rtminterface.cpp \
-    tasksmodel.cpp
+    tasksmodel.cpp \
+    xmltaskfactory.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -37,4 +38,5 @@ HEADERS += \
     settings.h \
     rtminterface.h \
     tasksmodel.h \
-    tasksmodel_p.h
+    tasksmodel_p.h \
+    xmltaskfactory.h
