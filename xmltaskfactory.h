@@ -11,6 +11,8 @@ class XmlTaskFactoryPrivate;
  * Use this class to create tasks from RTM task XML.
  * The idea is to create an instance of this class, give it RTM XML
  * and extract the tasks.
+ *
+ * @note it is the caller's responsibility to free the tasks!
  */
 class XmlTaskFactory : public QObject, QAbstractXmlReceiver
 {
@@ -18,6 +20,11 @@ class XmlTaskFactory : public QObject, QAbstractXmlReceiver
 public:
     explicit XmlTaskFactory(QIODevice *source, QObject *parent = 0);
 
+    /**
+     * Get the tasks constructed by this factory.
+     * @return a list of tasks.
+     * @note it is the caller's responsibility to free the tasks!
+     */
     QList<Task*> tasks() const;
 
 private:
