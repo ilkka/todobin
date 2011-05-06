@@ -40,6 +40,10 @@ void XmlTaskFactory::comment(const QString &value)
 
 void XmlTaskFactory::endDocument()
 {
+    if (d->currentTask != 0) {
+        d->tasks << d->currentTask;
+        d->currentTask = 0;
+    }
 }
 
 void XmlTaskFactory::endElement()
