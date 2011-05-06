@@ -20,6 +20,7 @@ public:
 
     QList<Task*> tasks() const;
 
+private:
     // implemented abstract methods from QAbstractXmlReceiver
     void atomicValue(const QVariant &value);
     void attribute(const QXmlName &name, const QStringRef &value);
@@ -34,7 +35,6 @@ public:
     void startElement(const QXmlName &name);
     void startOfSequence();
 
-private:
     QXmlQuery m_query;
     QList<Task*> m_tasks;
 };
