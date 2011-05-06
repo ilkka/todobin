@@ -105,8 +105,3 @@ void XmlTaskFactory::startElement(const QXmlName &name)
 void XmlTaskFactory::startOfSequence()
 {
 }
-
-XmlTaskFactory::FactoryState XmlTaskFactory::state() const
-{
-    return d->state;
-}
