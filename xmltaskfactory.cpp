@@ -30,11 +30,11 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
 {
 }
 
-void XmlTaskFactory::characters(const QStringRef &value)
+void XmlTaskFactory::characters(const QStringRef &/*value*/)
 {
 }
 
-void XmlTaskFactory::comment(const QString &value)
+void XmlTaskFactory::comment(const QString &/*value*/)
 {
 }
 
@@ -54,11 +54,11 @@ void XmlTaskFactory::endOfSequence()
 {
 }
 
-void XmlTaskFactory::namespaceBinding(const QXmlName &name)
+void XmlTaskFactory::namespaceBinding(const QXmlName &/*name*/)
 {
 }
 
-void XmlTaskFactory::processingInstruction(const QXmlName &target, const QString &value)
+void XmlTaskFactory::processingInstruction(const QXmlName &/*target*/, const QString &/*value*/)
 {
 }
 
