@@ -151,7 +151,7 @@ QDomDocument RTMInterface::parseReply(QIODevice *reply)
         qCritical() << "Error parsing getFrob reply:"
                     << errorMsg << "at line" << errorLine
                     << "col" << errorColumn;
-        throw ParseError;
+        throw ParseError();
     }
     return doc;
 }
