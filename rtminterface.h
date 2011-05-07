@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <QList>
 #include <QPair>
+#include <QDomDocument>
 
 class RTMInterfacePrivate;
 class QNetworkReply;
@@ -48,6 +49,11 @@ private:
     RTMInterfacePrivate* const d;
 
     /**
+     * Exception class representing an API reply parse error.
+     */
+    class ParseError {};
+
+    /**
      * Request frob. Frob will be delivered to handleGetFrobReply slot.
      */
     void requestFrob();
@@ -57,6 +63,11 @@ private:
      * handleCheckTokenReply slot.
      */
     void checkToken(const QString& token);
+
+    /**
+     * Parse a RTM API network reply and return DOM document.
+     */
+    QDomDocument parseReply(QIODevice* reply);
 
     typedef QPair<QString, QString> QueryItem;
     typedef QList<QueryItem> QueryItems;

@@ -17,6 +17,7 @@ namespace {
 const QByteArray APIKEY("0946e2f0273d2ac1c3b16d5e9c6d2a6a");
 const QByteArray SECRET("0116088919798a61");
 const QUrl ENDPOINT("http://api.rememberthemilk.com/services/rest/");
+const QUrl AUTH_URL_BASE("http://www.rememberthemilk.com/services/auth/");
 }
 
 RTMInterface::RTMInterface(QObject *parent) :
@@ -69,7 +70,7 @@ void RTMInterface::checkToken(const QString &token)
 void RTMInterface::initialize()
 {
     Settings settings;
-    QString token = settings.value("foursquare/token");
+    QString token = settings.value("foursquare/token").toString();
     if (token.isEmpty()) {
         // no token was stored, we need to authenticate
         requestFrob();
@@ -98,33 +99,31 @@ RTMInterface::QueryItem RTMInterface::signQueryParams(const QueryItems &queryIte
 void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
 {
     d->netSemaphore.release();
-    QDomDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(reply, &errorMsg, &errorLine, &errorColumn)) {
-        qCritical() << "Error parsing getFrob reply:"
-                    << errorMsg << "at line" << errorLine
-                    << "col" << errorColumn;
+    QDomDocument doc = parseReply(reply);
+    qDebug() << "frobReceived reply:" << doc.toString(2);
+    QString status = doc.documentElement().attribute("stat");
+    if (status == "ok") {
+        QDomElement frobElement = doc.documentElement().firstChildElement("frob");
+        d->frob = frobElement.firstChild().toText().data();
+        qDebug() << "Got frob" << d->frob;
+        updateAuthUrl();
+        emit authenticationNeeded(d->authUrl);
+    } else if (status == "fail"){
+        QDomElement errorElement = doc.documentElement().firstChildElement("err");
+        QString errorMsg = errorElement.attribute("msg");
+        QString errorCode = errorElement.attribute("code");
+        qWarning() << "getFrob failed with code" << errorCode << ":" << errorMsg;
     } else {
-        qDebug() << "frobReceived reply:" << doc.toString(2);
-        QString status = doc.documentElement().attribute("stat");
-        if (status == "ok") {
-            QDomElement frobElement = doc.documentElement().firstChildElement("frob");
-            d->frob = frobElement.firstChild().toText().data();
-            qDebug() << "Got frob" << d->frob;
-            updateAuthUrl();
-            emit authenticationNeeded(d->authUrl);
-        } else if (status == "fail"){
-            QDomElement errorElement = doc.documentElement().firstChildElement("err");
-            QString errorMsg = errorElement.attribute("msg");
-            QString errorCode = errorElement.attribute("code");
-            qWarning() << "getFrob failed with code" << errorCode << ":" << errorMsg;
-        } else {
-            qWarning() << "Unknown status" << status;
-        }
+        qWarning() << "Unknown status" << status;
     }
     reply->deleteLater();
+}
+
+void RTMInterface::handleCheckTokenReply(QNetworkReply *reply)
+{
+    d->netSemaphore.release();
+    QDomDocument doc = parseReply(reply);
+    qDebug() << "checkToken reply:" << doc.toString(2);
 }
 
 void RTMInterface::updateAuthUrl()
@@ -140,4 +139,19 @@ void RTMInterface::updateAuthUrl()
         qDebug() << "Updated auth URL:" << d->authUrl;
         emit authUrlChanged();
     }
+}
+
+QDomDocument RTMInterface::parseReply(QIODevice *reply)
+{
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(reply, &errorMsg, &errorLine, &errorColumn)) {
+        qCritical() << "Error parsing getFrob reply:"
+                    << errorMsg << "at line" << errorLine
+                    << "col" << errorColumn;
+        throw ParseError;
+    }
+    return doc;
 }
