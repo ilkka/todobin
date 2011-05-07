@@ -3,13 +3,16 @@
 
 #include <QNetworkAccessManager>
 #include <QSemaphore>
+#include <QUrl>
 
 class RTMInterfacePrivate
 {
 public:
     QNetworkAccessManager* net;
     QSemaphore netSemaphore;
+
     QString frob;
+    QUrl authUrl;
 };
 
 #endif // RTMINTERFACE_P_H

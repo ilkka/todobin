@@ -36,7 +36,15 @@ private slots:
     // For debug only -- kill me
     void dbgDelayLaunch();
 
+    /**
+     * Handle reply to getFrob request.
+     */
     void handleGetFrobReply(QNetworkReply* reply);
+
+    /**
+     * Update auth URL after e.g. frob has changed.
+     */
+    void updateAuthUrl();
 
 private:
     friend class RTMInterfacePrivate;

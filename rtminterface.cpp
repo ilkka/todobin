@@ -31,8 +31,7 @@ RTMInterface::~RTMInterface()
 
 QUrl RTMInterface::authUrl()
 {
-    QUrl url("http://dummy.auth.url");
-    return url;
+    return d->authUrl;
 }
 
 void RTMInterface::requestFrob()
@@ -95,6 +94,7 @@ void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
             QDomElement frobElement = doc.documentElement().firstChildElement("frob");
             d->frob = frobElement.firstChild().toText().data();
             qDebug() << "Got frob" << d->frob;
+            updateAuthUrl();
         } else if (status == "fail"){
             QDomElement errorElement = doc.documentElement().firstChildElement("err");
             QString errorMsg = errorElement.attribute("msg");
@@ -105,4 +105,19 @@ void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
         }
     }
     reply->deleteLater();
+}
+
+void RTMInterface::updateAuthUrl()
+{
+    QUrl url(AUTH_URL_BASE);
+    QueryItems items;
+    items << QueryItem("api_key", APIKEY)
+          << QueryItem("perms", "delete")
+          << QueryItem("frob", d->frob);
+    items << signQueryParams(items);
+    if (d->authUrl != url) {
+        d->authUrl = url;
+        qDebug() << "Updated auth URL:" << d->authUrl;
+        emit authUrlChanged();
+    }
 }
