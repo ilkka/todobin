@@ -41,6 +41,7 @@ void RTMInterface::requestFrob()
     items << QueryItem("method", "rtm.auth.getFrob");
     items << signQueryParams(items);
     url.setQueryItems(items);
+    qDebug() << "requestFrob with URL" << url.toString();
     d->netSemaphore.acquire();
     d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
     connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(frobReceived(QNetworkReply*)));
@@ -71,7 +72,7 @@ RTMInterface::QueryItem RTMInterface::signQueryParams(const QueryItems &queryIte
         hash.addData(key.toUtf8());
         hash.addData(sortedItems[key].toUtf8());
     }
-    return QueryItem("api_sig", hash.result());
+    return QueryItem("api_sig", hash.result().toHex());
 }
 
 void RTMInterface::frobReceived(QNetworkReply *reply)
