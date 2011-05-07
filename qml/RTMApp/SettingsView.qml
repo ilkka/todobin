@@ -1,5 +1,4 @@
 import QtQuick 1.0
-import QtWebKit 1.0
 import "./Components"
 
 Rectangle {
@@ -42,20 +41,6 @@ Rectangle {
                     settings.setValue("foursquare/secret", secretfield.text)
                     settings.setValue("foursquare/endpoint", endpointfield.text)
                 }
-            }
-
-            Button {
-                label: "Load auth page"
-                onClicked: {
-                    webview.url = api.getAuthUrl()
-                }
-            }
-
-            WebView {
-                id: webview
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 500
             }
         }
     }
