@@ -36,7 +36,7 @@ private slots:
     // For debug only -- kill me
     void dbgDelayLaunch();
 
-    void frobReceived(QNetworkReply* reply);
+    void handleGetFrobReply(QNetworkReply* reply);
 
 private:
     friend class RTMInterfacePrivate;

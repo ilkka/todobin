@@ -46,7 +46,7 @@ void RTMInterface::requestFrob()
     qDebug() << "requestFrob with URL" << url.toString();
     d->netSemaphore.acquire();
     d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
-    connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(frobReceived(QNetworkReply*)));
+    connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(handleGetFrobReply(QNetworkReply*)));
     d->net->get(QNetworkRequest(url));
 }
 
@@ -77,7 +77,7 @@ RTMInterface::QueryItem RTMInterface::signQueryParams(const QueryItems &queryIte
     return QueryItem("api_sig", hash.result().toHex());
 }
 
-void RTMInterface::frobReceived(QNetworkReply *reply)
+void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
 {
     d->netSemaphore.release();
     QDomDocument doc;
