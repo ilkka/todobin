@@ -92,7 +92,9 @@ void RTMInterface::frobReceived(QNetworkReply *reply)
         qDebug() << "frobReceived reply:" << doc.toString(2);
         QString status = doc.documentElement().attribute("stat");
         if (status == "ok") {
-
+            QDomElement frobElement = doc.documentElement().firstChildElement("frob");
+            d->frob = frobElement.firstChild().toText().data();
+            qDebug() << "Got frob" << d->frob;
         } else if (status == "fail"){
             QDomElement errorElement = doc.documentElement().firstChildElement("err");
             QString errorMsg = errorElement.attribute("msg");

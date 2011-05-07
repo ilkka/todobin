@@ -9,6 +9,7 @@ class RTMInterfacePrivate
 public:
     QNetworkAccessManager* net;
     QSemaphore netSemaphore;
+    QString frob;
 };
 
 #endif // RTMINTERFACE_P_H
