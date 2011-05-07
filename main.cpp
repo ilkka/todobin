@@ -14,8 +14,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     Settings settings;
-    // Hardcode endpoint URL here
-    settings.setValue("foursquare/endpoint", QUrl("http://api.rememberthemilk.com/services/rest/"));
 
     TasksModel model;
 

@@ -21,7 +21,7 @@ DEFINES += QMLJSDEBUGGER
 # CONFIG += mobility
 # MOBILITY +=
 
-QT += xmlpatterns
+QT += xmlpatterns network
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
@@ -42,4 +42,5 @@ HEADERS += \
     tasksmodel_p.h \
     xmltaskfactory.h \
     task.h \
-    xmltaskfactory_p.h
+    xmltaskfactory_p.h \
+    rtminterface_p.h
