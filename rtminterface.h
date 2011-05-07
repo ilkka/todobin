@@ -33,8 +33,6 @@ signals:
     void authenticationNeeded();
 
 private slots:
-    // For debug only -- kill me
-    void dbgDelayLaunch();
 
     // API reply handlers for methods
     void handleGetFrobReply(QNetworkReply* reply);

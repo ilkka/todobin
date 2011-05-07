@@ -78,11 +78,6 @@ void RTMInterface::initialize()
     }
 }
 
-void RTMInterface::dbgDelayLaunch()
-{
-    emit authenticationNeeded();
-}
-
 RTMInterface::QueryItem RTMInterface::signQueryParams(const QueryItems &queryItems) const
 {
     // the signature is the md5 of our secret, concatenated with
