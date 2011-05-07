@@ -11,7 +11,7 @@ class Settings : public QObject
 public:
     explicit Settings(QObject *parent = 0);
 
-    Q_INVOKABLE QVariant value(const QString& key) const;
+    Q_INVOKABLE QVariant value(const QString& key);
     Q_INVOKABLE void setValue(const QString& key, QVariant value);
 
 private:

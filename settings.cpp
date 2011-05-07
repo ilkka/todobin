@@ -5,7 +5,7 @@ Settings::Settings(QObject *parent) :
 {
 }
 
-QVariant Settings::value(const QString &key) const
+QVariant Settings::value(const QString &key)
 {
     m_storage.sync();
     return m_storage.value(key);
