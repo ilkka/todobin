@@ -114,6 +114,7 @@ void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
             d->frob = frobElement.firstChild().toText().data();
             qDebug() << "Got frob" << d->frob;
             updateAuthUrl();
+            emit authenticationNeeded(d->authUrl);
         } else if (status == "fail"){
             QDomElement errorElement = doc.documentElement().firstChildElement("err");
             QString errorMsg = errorElement.attribute("msg");

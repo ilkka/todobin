@@ -30,7 +30,7 @@ public:
 
 signals:
     void authUrlChanged();
-    void authenticationNeeded();
+    void authenticationNeeded(QUrl authUrl);
 
 private slots:
 
