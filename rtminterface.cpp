@@ -134,6 +134,7 @@ void RTMInterface::updateAuthUrl()
           << QueryItem("perms", "delete")
           << QueryItem("frob", d->frob);
     items << signQueryParams(items);
+    url.setQueryItems(items);
     if (d->authUrl != url) {
         d->authUrl = url;
         qDebug() << "Updated auth URL:" << d->authUrl;
