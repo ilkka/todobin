@@ -36,10 +36,9 @@ private slots:
     // For debug only -- kill me
     void dbgDelayLaunch();
 
-    /**
-     * Handle reply to getFrob request.
-     */
+    // API reply handlers for methods
     void handleGetFrobReply(QNetworkReply* reply);
+    void handleCheckTokenReply(QNetworkReply* reply);
 
     /**
      * Update auth URL after e.g. frob has changed.
@@ -51,9 +50,15 @@ private:
     RTMInterfacePrivate* const d;
 
     /**
-     * Request frob. Frob will be delivered to frobReceived slot.
+     * Request frob. Frob will be delivered to handleGetFrobReply slot.
      */
     void requestFrob();
+
+    /**
+     * Check validity of auth token. Reply will be delivered to
+     * handleCheckTokenReply slot.
+     */
+    void checkToken(const QString& token);
 
     typedef QPair<QString, QString> QueryItem;
     typedef QList<QueryItem> QueryItems;

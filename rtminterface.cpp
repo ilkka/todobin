@@ -9,6 +9,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include "settings.h"
+
 #include <QDebug>
 
 namespace {
@@ -38,8 +40,8 @@ void RTMInterface::requestFrob()
 {
     QUrl url(ENDPOINT);
     QueryItems items;
-    items << QueryItem("api_key", APIKEY);
-    items << QueryItem("method", "rtm.auth.getFrob");
+    items << QueryItem("api_key", APIKEY)
+          << QueryItem("method", "rtm.auth.getFrob");
     items << signQueryParams(items);
     url.setQueryItems(items);
     qDebug() << "requestFrob with URL" << url.toString();
@@ -49,9 +51,31 @@ void RTMInterface::requestFrob()
     d->net->get(QNetworkRequest(url));
 }
 
+void RTMInterface::checkToken(const QString &token)
+{
+    QUrl url(ENDPOINT);
+    QueryItems items;
+    items << QueryItem("api_key", APIKEY)
+          << QueryItem("method", "rtm.auth.checkToken")
+          << QueryItem("auth_token", token);
+    items << signQueryParams(items);
+    qDebug() << "checkToken with URL" << url.toString();
+    d->netSemaphore.acquire();
+    d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
+    connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(handleCheckTokenReply(QNetworkReply*)));
+    d->net->get(QNetworkRequest(url));
+}
+
 void RTMInterface::initialize()
 {
-    requestFrob();
+    Settings settings;
+    QString token = settings.value("foursquare/token");
+    if (token.isEmpty()) {
+        // no token was stored, we need to authenticate
+        requestFrob();
+    } else {
+        checkToken(token);
+    }
 }
 
 void RTMInterface::dbgDelayLaunch()
