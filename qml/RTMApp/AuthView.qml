@@ -5,5 +5,5 @@ WebView {
     id: webview
     width: 400
     height: 400
-    url: "http://www.google.com"
+    url: api.authUrl
 }
