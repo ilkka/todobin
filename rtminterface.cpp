@@ -6,7 +6,7 @@
 #include <QCryptographicHash>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-
+#include <QDomDocument>
 #include <QDebug>
 
 namespace {
@@ -78,6 +78,16 @@ RTMInterface::QueryItem RTMInterface::signQueryParams(const QueryItems &queryIte
 void RTMInterface::frobReceived(QNetworkReply *reply)
 {
     d->netSemaphore.release();
-    qDebug() << "frobReceived reply:" << reply->readAll();
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(reply, &errorMsg, &errorLine, &errorColumn)) {
+        qCritical() << "Error parsing getFrob reply:"
+                    << errorMsg << "at line" << errorLine
+                    << "col" << errorColumn;
+    } else {
+        qDebug() << "frobReceived reply:" << doc.toString(2);
+    }
     reply->deleteLater();
 }
