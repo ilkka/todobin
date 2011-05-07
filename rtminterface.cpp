@@ -7,6 +7,8 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QDomDocument>
+#include <QDomElement>
+
 #include <QDebug>
 
 namespace {
@@ -88,6 +90,17 @@ void RTMInterface::frobReceived(QNetworkReply *reply)
                     << "col" << errorColumn;
     } else {
         qDebug() << "frobReceived reply:" << doc.toString(2);
+        QString status = doc.documentElement().attribute("stat");
+        if (status == "ok") {
+
+        } else if (status == "fail"){
+            QDomElement errorElement = doc.documentElement().firstChildElement("err");
+            QString errorMsg = errorElement.attribute("msg");
+            QString errorCode = errorElement.attribute("code");
+            qWarning() << "getFrob failed with code" << errorCode << ":" << errorMsg;
+        } else {
+            qWarning() << "Unknown status" << status;
+        }
     }
     reply->deleteLater();
 }
