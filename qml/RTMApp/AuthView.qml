@@ -34,11 +34,17 @@ Rectangle {
         }
     }
 
-    Text {
+    Rectangle {
         id: pleasewait
-        visible: false
         anchors.fill: parent
-        text: "Please wait..."
+        color: "black"
+        opacity: 0.7
+        Text {
+            color: "white"
+            anchors.centerIn: parent
+            visible: false
+            text: "Please wait..."
+        }
     }
 }
 
