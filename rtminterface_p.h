@@ -14,6 +14,8 @@ public:
     QString frob;
     QUrl authUrl;
     QString token;
+    QString username;
+    QString fullname;
 };
 
 #endif // RTMINTERFACE_P_H

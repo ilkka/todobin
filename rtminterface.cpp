@@ -114,6 +114,10 @@ void RTMInterface::handleCheckTokenReply(QNetworkReply *reply)
     qDebug() << "checkToken reply:" << result.doc.toString(2);
     if (result.ok) {
         qDebug() << "Token is OK";
+        QDomElement authElement = result.doc.documentElement().firstChildElement("auth");
+        QDomElement userElement = authElement.firstChildElement("user");
+        d->username = userElement.attribute("username");
+        d->fullname = userElement.attribute("fullname");
         emit initializationCompleted();
     } else {
         qWarning() << "checkToken failed with code"
@@ -175,6 +179,9 @@ void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
         qDebug() << "Got token" << d->token;
         Settings settings;
         settings.setValue(Settings::FOURSQUARE_TOKEN, d->token);
+        QDomElement userElement = authElement.firstChildElement("user");
+        d->username = userElement.attribute("username");
+        d->fullname = userElement.attribute("fullname");
         emit initializationCompleted();
     } else {
         qWarning() << "getToken failed with code"
