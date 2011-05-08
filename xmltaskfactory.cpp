@@ -82,6 +82,25 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
     if (nodeName == "taskseries" && attributeName == "name") {
         Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
         d->currentTask->setTitle(value.toString());
+        qDebug() << "Set current task title to" << d->currentTask->title();
+    } else if (nodeName == "task" && attributeName == "due") {
+        Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
+        QString stamp = value.toString().trimmed();
+        if (!stamp.isEmpty()) {
+            // RTM returns all timestamps in UTC but QDateTime
+            // can't parse the trailing "Z" from the RFC-3339 notation,
+            // so we explicitly set the QDateTime to UTC and chop off the
+            // "Z"
+            QDateTime due = QDateTime::fromString(stamp.left(stamp.length() - 1), Qt::ISODate);
+            if (!due.isValid() || due.isNull()) {
+                qWarning() << "Unable to parse due timestamp:" << value.toString();
+            } else {
+                due.setTimeSpec(Qt::UTC);
+                d->currentTask->setDue(due);
+                qDebug() << "Set current task due to"
+                         << due.toString();
+            }
+        }
     }
 }
 
