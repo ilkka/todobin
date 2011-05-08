@@ -166,6 +166,17 @@ void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
     d->netSemaphore.release();
     ApiReplyParseResult result = parseReply(reply);
     qDebug() << "getToken reply:" << result.doc.toString(2);
+    if (result.ok) {
+        QDomElement authElement = result.doc.documentElement().firstChildElement("auth");
+        QDomElement tokenElement = authElement.firstChildElement("token");
+        QString token = tokenElement.firstChild().toText().data();
+        qDebug() << "Got token" << token;
+        Settings settings;
+        settings.setValue(Settings::FOURSQUARE_TOKEN, token);
+    } else {
+        qWarning() << "getToken failed with code"
+                   << result.errorCode << ":" << result.errorMsg;
+    }
     reply->deleteLater();
 }
 
