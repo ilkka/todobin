@@ -20,16 +20,7 @@ Rectangle {
                 anchors.fill: parent
                 anchors.margins: 5
                 radius: 8
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.00;
-                        color: "#ffffff";
-                    }
-                    GradientStop {
-                        position: 1.00;
-                        color: "#e0e0e0";
-                    }
-                }
+                color: "#e0e0e0";
                 Text {
                     id: tasktitle
                     text: "<b>" + title + "</b>"
