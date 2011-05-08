@@ -29,8 +29,16 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
+            pleasewait.visible = true
             api.authenticationCompleted()
         }
+    }
+
+    Text {
+        id: pleasewait
+        visible: false
+        anchors.fill: parent
+        text: "Please wait..."
     }
 }
 
