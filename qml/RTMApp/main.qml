@@ -11,13 +11,10 @@ Rectangle {
         source: "Splash.qml"
     }
 
-    function showAuthView() {
-        pageloader.source = "AuthView.qml"
-    }
-
     Connections {
         target: api
-        onAuthenticationNeeded: showAuthView()
+        onAuthenticationNeeded: pageloader.source = "AuthView.qml"
+        onInitializationCompleted: pageloader.source = "TaskView.qml"
     }
 
     Component.onCompleted: {
