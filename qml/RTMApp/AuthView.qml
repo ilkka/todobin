@@ -36,6 +36,11 @@ Rectangle {
             url: api.authUrl
             preferredHeight: flickable.height
             preferredWidth: flickable.width
+            settings.javascriptEnabled: true
+
+            onLoadStarted: statustext.text = "Loading..."
+            onLoadFinished: statustext.text = "Done loading!"
+            onLoadFailed: statustext.text = "Error :("
         }
     }
 
@@ -44,15 +49,22 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        height: okbutton.height
+        height: childrenRect.height
         color: "black"
-        Button {
-            id: okbutton
-            label: "OK"
-            anchors.centerIn: parent
-            onClicked: {
-                pleasewait.visible = true
-                api.authenticationCompleted()
+        Row {
+            height: childrenRect.height
+            Button {
+                id: okbutton
+                label: "OK"
+                onClicked: {
+                    pleasewait.visible = true
+                    api.authenticationCompleted()
+                }
+            }
+            Text {
+                id: statustext
+                color: "white"
+                text: "ready"
             }
         }
     }
