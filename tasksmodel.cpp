@@ -46,3 +46,8 @@ void TasksModel::addTask(Task *t)
     d->tasks << t;
     endInsertRows();
 }
+
+void TasksModel::populate()
+{
+    emit requestTaskList();
+}

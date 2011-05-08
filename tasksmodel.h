@@ -18,6 +18,11 @@ public:
     explicit TasksModel(QObject *parent = 0);
     virtual ~TasksModel();
 
+    /**
+     * Request to populate the model.
+     */
+    Q_INVOKABLE void populate();
+
     /** @see QAbstractListModel::rowCount
       */
     int rowCount(const QModelIndex &parent) const;
@@ -29,6 +34,13 @@ public:
     /** @see QAbstractListModel::headerData
       */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+signals:
+    /**
+     * Emitted when the model wants a task list. The handling slot
+     * should call addTask to add the tasks.
+     */
+    void requestTaskList();
 
 public slots:
     /**
