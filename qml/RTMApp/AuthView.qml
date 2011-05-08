@@ -52,7 +52,7 @@ Rectangle {
         height: childrenRect.height
         color: "black"
         Row {
-            height: childrenRect.height
+            height: okbutton.height
             Button {
                 id: okbutton
                 label: "OK"
@@ -63,6 +63,7 @@ Rectangle {
             }
             Text {
                 id: statustext
+                anchors.verticalCenter: parent.verticalCenter
                 color: "white"
                 text: "ready"
             }
