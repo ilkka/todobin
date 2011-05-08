@@ -2,6 +2,7 @@
 #define XMLTASKFACTORY_H
 
 #include <QAbstractXmlReceiver>
+#include <QDomDocument>
 
 class Task;
 
@@ -21,6 +22,7 @@ public:
     explicit XmlTaskFactory(QObject *parent = 0);
     virtual ~XmlTaskFactory();
 
+public slots:
     /**
      * Set XML source for reading tasks.
      * This will cause the factory to start emitting tasks so make
