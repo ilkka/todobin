@@ -63,7 +63,7 @@ void RTMInterface::checkToken(const QString &token)
 void RTMInterface::initialize()
 {
     Settings settings;
-    QString token = settings.value("foursquare/token").toString();
+    QString token = settings.value(Settings::FOURSQUARE_TOKEN).toString();
     if (token.isEmpty()) {
         // no token was stored, we need to authenticate
         requestFrob();
