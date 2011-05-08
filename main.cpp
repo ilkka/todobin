@@ -17,16 +17,15 @@ int main(int argc, char *argv[])
 
     TasksModel model;
 
-    // Open dummydata file
-    QFile f("qml/RTMApp/dummydata/all_tasks_response.xml");
-    if (!f.open(QIODevice::ReadOnly)) {
-        throw "Can't open XML file";
-    }
     XmlTaskFactory factory;
     QObject::connect(&factory, SIGNAL(newTask(Task*)), &model, SLOT(addTask(Task*)));
-    factory.setSource(&f);
 
     RTMInterface api;
+
+    // connect api, model and factory to enable task list fetching
+    // and adding the tasks to the model
+    api.connect(&model, SIGNAL(requestTaskList()), SLOT(requestTaskList()));
+    factory.connect(&api, SIGNAL(taskListReceived(QIODevice*)), SLOT(setSource(QIODevice*)));
 
     QmlApplicationViewer viewer;
     viewer.rootContext()->setContextProperty("settings", &settings);
