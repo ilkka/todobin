@@ -18,6 +18,8 @@ Rectangle {
 
         model: tasksModel
         delegate: Text { text: title }
+
+        Component.onCompleted: tasksModel.populate()
     }
 
     Row {
