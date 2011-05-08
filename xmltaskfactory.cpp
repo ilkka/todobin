@@ -168,5 +168,6 @@ void XmlTaskFactory::finishCreateTask()
 
 void XmlTaskFactory::addTagToCurrentTask()
 {
-    qDebug() << "Would add tag" << d->lastTextNodeContents << "to task" << d->currentTask->title();
+    qDebug() << "Adding tag" << d->lastTextNodeContents << "to task" << d->currentTask->title();
+    d->currentTask->addTag(d->lastTextNodeContents);
 }
