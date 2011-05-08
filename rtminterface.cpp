@@ -171,10 +171,10 @@ void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
     if (result.ok) {
         QDomElement authElement = result.doc.documentElement().firstChildElement("auth");
         QDomElement tokenElement = authElement.firstChildElement("token");
-        QString token = tokenElement.firstChild().toText().data();
-        qDebug() << "Got token" << token;
+        d->token = tokenElement.firstChild().toText().data();
+        qDebug() << "Got token" << d->token;
         Settings settings;
-        settings.setValue(Settings::FOURSQUARE_TOKEN, token);
+        settings.setValue(Settings::FOURSQUARE_TOKEN, d->token);
         emit initializationCompleted();
     } else {
         qWarning() << "getToken failed with code"

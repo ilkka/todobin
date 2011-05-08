@@ -13,6 +13,7 @@ public:
 
     QString frob;
     QUrl authUrl;
+    QString token;
 };
 
 #endif // RTMINTERFACE_P_H
