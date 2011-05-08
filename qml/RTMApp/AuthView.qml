@@ -6,21 +6,28 @@ Rectangle {
     id: root
     width: 400
     height: 400
-    color: "black"
 
-    Text {
+    Rectangle {
         id: instructions
-        text: "Authenticate using the browser, press OK when done."
+        color: "black"
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: "white"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: instructiontext.paintedHeight
+        Text {
+            id: instructiontext
+            text: "Authenticate using the browser, press OK when done."
+            anchors.centerIn: parent
+            color: "white"
+        }
     }
+
     Flickable {
         id: flickable
         anchors.top: instructions.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: okbutton.top
+        anchors.bottom: buttons.top
         contentHeight: Math.max(height, webview.height)
         contentWidth: Math.max(width, webview.width)
         WebView {
@@ -30,26 +37,34 @@ Rectangle {
             preferredWidth: flickable.width
         }
     }
-    Button {
-        id: okbutton
-        label: "OK"
+
+    Rectangle {
+        id: buttons
         anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: {
-            pleasewait.visible = true
-            api.authenticationCompleted()
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: okbutton.height
+        Button {
+            id: okbutton
+            label: "OK"
+            anchors.centerIn: parent
+            onClicked: {
+                pleasewait.visible = true
+                api.authenticationCompleted()
+            }
         }
     }
+
 
     Rectangle {
         id: pleasewait
         anchors.fill: parent
         color: "black"
         opacity: 0.7
+        visible: false
         Text {
             color: "white"
             anchors.centerIn: parent
-            visible: false
             text: "Please wait..."
         }
     }
