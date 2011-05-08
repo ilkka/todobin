@@ -56,12 +56,25 @@ signals:
      */
     void initializationCompleted();
 
+    /**
+     * Task list has been received from the API.
+     * @param tasklist the XML reply with the tasks.
+     */
+    void taskListReceived(QIODevice* tasklist);
+
+public slots:
+    /**
+     * Get task list from RTM.
+     */
+    void requestTaskList();
+
 private slots:
 
     // API reply handlers for methods
     void handleGetFrobReply(QNetworkReply* reply);
     void handleCheckTokenReply(QNetworkReply* reply);
     void handleGetTokenReply(QNetworkReply* reply);
+    void handleTaskListReply(QNetworkReply* reply);
 
     /**
      * Update auth URL after e.g. frob has changed.
@@ -86,12 +99,12 @@ private:
      * Check validity of auth token. Reply will be delivered to
      * handleCheckTokenReply slot.
      */
-    void checkToken(const QString& token);
+    void checkToken();
 
     /**
      * Get authentication token from RTM.
      */
-    void getToken();
+    void requestToken();
 
     typedef QPair<QString, QString> QueryItem;
     typedef QList<QueryItem> QueryItems;

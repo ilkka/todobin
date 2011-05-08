@@ -9,6 +9,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QtGlobal>
+#include <QBuffer>
 
 #include "settings.h"
 
@@ -48,10 +49,10 @@ void RTMInterface::requestFrob()
     d->net->get(QNetworkRequest(url));
 }
 
-void RTMInterface::checkToken(const QString &token)
+void RTMInterface::checkToken()
 {
     QueryItems params;
-    params << QueryItem("auth_token", token);
+    params << QueryItem("auth_token", d->token);
     QUrl url = apiUrlForMethod("rtm.auth.checkToken", params);
     qDebug() << "checkToken with URL" << url.toString();
     d->netSemaphore.acquire();
@@ -68,7 +69,8 @@ void RTMInterface::initialize()
         // no token was stored, we need to authenticate
         requestFrob();
     } else {
-        checkToken(token);
+        d->token = token;
+        checkToken();
     }
 }
 
@@ -192,10 +194,10 @@ void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
 
 void RTMInterface::authenticationCompleted()
 {
-    getToken();
+    requestToken();
 }
 
-void RTMInterface::getToken()
+void RTMInterface::requestToken()
 {
     Q_ASSERT_X(!d->frob.isEmpty(), "RTMInterface::authenticationCompleted",
                "Frob cannot be empty at this point");
@@ -221,4 +223,39 @@ QUrl RTMInterface::apiUrlForMethod(const QString& method,
     items << signQueryParams(items);
     url.setQueryItems(items);
     return url;
+}
+
+void RTMInterface::requestTaskList()
+{
+    Q_ASSERT_X(!d->token.isEmpty(), "RTMInterface::requestTaskList",
+               "Token cannot be empty");
+    QueryItems params;
+    params << QueryItem("auth_token", d->token);
+    QUrl url = apiUrlForMethod("rtm.tasks.getList", params);
+    qDebug() << "get tasklist with URL" << url.toString();
+    d->netSemaphore.acquire();
+    d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
+    connect(d->net, SIGNAL(finished(QNetworkReply*)),
+            SLOT(handleTaskListReply(QNetworkReply*)));
+    d->net->get(QNetworkRequest(url));
+}
+
+void RTMInterface::handleTaskListReply(QNetworkReply *reply)
+{
+    d->netSemaphore.release();
+    ApiReplyParseResult result = parseReply(reply);
+    qDebug() << "tasklist reply received";
+    if (result.ok) {
+        // making a copy of the doc here
+        // TODO: do this some other way
+        QBuffer* buf = new QBuffer(this);
+        buf->setData(result.doc.toByteArray(-1));
+        buf->open(QIODevice::ReadOnly);
+        emit taskListReceived(buf);
+        buf->deleteLater();
+    } else {
+        qWarning() << "tasks.getList failed with code"
+                   << result.errorCode << ":" << result.errorMsg;
+    }
+    reply->deleteLater();
 }
