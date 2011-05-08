@@ -30,6 +30,7 @@ Rectangle {
         anchors.bottom: buttons.top
         contentHeight: Math.max(height, webview.height)
         contentWidth: Math.max(width, webview.width)
+        clip: true
         WebView {
             id: webview
             url: api.authUrl
