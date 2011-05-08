@@ -39,12 +39,7 @@ QUrl RTMInterface::authUrl()
 
 void RTMInterface::requestFrob()
 {
-    QUrl url(ENDPOINT);
-    QueryItems items;
-    items << QueryItem("api_key", APIKEY)
-          << QueryItem("method", "rtm.auth.getFrob");
-    items << signQueryParams(items);
-    url.setQueryItems(items);
+    QUrl url = apiUrlForMethod("rtm.auth.getFrob");
     qDebug() << "requestFrob with URL" << url.toString();
     d->netSemaphore.acquire();
     d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
@@ -54,12 +49,9 @@ void RTMInterface::requestFrob()
 
 void RTMInterface::checkToken(const QString &token)
 {
-    QUrl url(ENDPOINT);
-    QueryItems items;
-    items << QueryItem("api_key", APIKEY)
-          << QueryItem("method", "rtm.auth.checkToken")
-          << QueryItem("auth_token", token);
-    items << signQueryParams(items);
+    QueryItems params;
+    params << QueryItem("auth_token", token);
+    QUrl url = apiUrlForMethod("rtm.auth.checkToken", params);
     qDebug() << "checkToken with URL" << url.toString();
     d->netSemaphore.acquire();
     d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
@@ -155,4 +147,27 @@ QDomDocument RTMInterface::parseReply(QIODevice *reply)
         throw ParseError();
     }
     return doc;
+}
+
+void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
+{
+
+}
+
+void RTMInterface::authenticationCompleted()
+{
+
+}
+
+QUrl RTMInterface::apiUrlForMethod(const QString& method,
+                                   const QueryItems& extra_params)
+{
+    QUrl url(ENDPOINT);
+    QueryItems items;
+    items << QueryItem("api_key", APIKEY)
+          << QueryItem("method", method)
+          << extra_params;
+    items << signQueryParams(items);
+    url.setQueryItems(items);
+    return url;
 }

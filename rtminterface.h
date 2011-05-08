@@ -25,6 +25,12 @@ public:
     Q_INVOKABLE void initialize();
 
     /**
+     * Called when user has completed browser authentication.
+     * We can now get an auth token using our stored frob.
+     */
+    Q_INVOKABLE void authenticationCompleted();
+
+    /**
      * RTM authentication URL.
      */
     QUrl authUrl();
@@ -38,6 +44,7 @@ private slots:
     // API reply handlers for methods
     void handleGetFrobReply(QNetworkReply* reply);
     void handleCheckTokenReply(QNetworkReply* reply);
+    void handleGetTokenReply(QNetworkReply* reply);
 
     /**
      * Update auth URL after e.g. frob has changed.
@@ -78,6 +85,16 @@ private:
      * This should be appended to the query.
      */
     QueryItem signQueryParams(const QueryItems& queryItems) const;
+
+    /**
+     * Generate a signed API url for the given method
+     * and the given parameters.
+     * @param method the name of the method.
+     * @param extra_params the list of method-specific parameters.
+     * @return a signed API url.
+     */
+    QUrl apiUrlForMethod(const QString& method,
+                         const QueryItems& extra_params = QueryItems());
 };
 
 #endif // RTMINTERFACE_H
