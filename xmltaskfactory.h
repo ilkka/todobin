@@ -69,6 +69,13 @@ private:
     void startElement(const QXmlName &name);
     void startOfSequence();
 
+    void handleDueAttribute(const QString& value);
+    void handleCompletedAttribute(const QString& value);
+    void handlePriorityAttribute(const QString& value);
+
+    // Parse an RTM timestamp
+    QDateTime parseTimestamp(const QString& stamp) const;
+
     friend class XmlTaskFactoryPrivate;
     XmlTaskFactoryPrivate* const d;
 };

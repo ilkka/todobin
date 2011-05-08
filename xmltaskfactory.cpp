@@ -83,25 +83,70 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
         Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
         d->currentTask->setTitle(value.toString());
         qDebug() << "Set current task title to" << d->currentTask->title();
-    } else if (nodeName == "task" && attributeName == "due") {
-        Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
-        QString stamp = value.toString().trimmed();
-        if (!stamp.isEmpty()) {
-            // RTM returns all timestamps in UTC but QDateTime
-            // can't parse the trailing "Z" from the RFC-3339 notation,
-            // so we explicitly set the QDateTime to UTC and chop off the
-            // "Z"
-            QDateTime due = QDateTime::fromString(stamp.left(stamp.length() - 1), Qt::ISODate);
-            if (!due.isValid() || due.isNull()) {
-                qWarning() << "Unable to parse due timestamp:" << value.toString();
-            } else {
-                due.setTimeSpec(Qt::UTC);
-                d->currentTask->setDue(due);
-                qDebug() << "Set current task due to"
-                         << due.toString();
-            }
+    } else if (nodeName == "task") {
+        if (attributeName == "due") {
+            handleDueAttribute(value.toString());
+        } else if (attributeName == "completed") {
+            handleCompletedAttribute(value.toString());
+        } else if (attributeName == "priority") {
+            handlePriorityAttribute(value.toString());
         }
     }
+}
+
+void XmlTaskFactory::handleDueAttribute(const QString& value)
+{
+    Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::handleDueAttribute", "No current task");
+    QString stamp = value.trimmed();
+    if (!stamp.isEmpty()) {
+        QDateTime due = parseTimestamp(stamp);
+        if (due.isValid()) {
+            d->currentTask->setDue(due);
+            qDebug() << "Set current task due to"
+                     << due.toString();
+        }
+    }
+}
+
+void XmlTaskFactory::handleCompletedAttribute(const QString &value)
+{
+    Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::handleCompletedAttribute", "No current task");
+    QString stamp = value.trimmed();
+    if (!stamp.isEmpty()) {
+        QDateTime completed = parseTimestamp(stamp);
+        if (completed.isValid()) {
+            d->currentTask->setCompleted(completed);
+            qDebug() << "Set current task completion to"
+                     << completed.toString();
+        }
+    }
+}
+
+void XmlTaskFactory::handlePriorityAttribute(const QString &value)
+{
+    Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::handlePriorityAttribute", "No current task");
+    QString priority = value.trimmed();
+    if (priority == "1") {
+        d->currentTask->setPriority(Task::PRIO_FIRST);
+    } else if (priority == "2") {
+        d->currentTask->setPriority(Task::PRIO_SECOND);
+    } else if (priority == "3") {
+        d->currentTask->setPriority(Task::PRIO_THIRD);
+    } else {
+        d->currentTask->setPriority(Task::PRIO_NONE);
+    }
+    qDebug() << "Set current task priority to" << d->currentTask->priority();
+}
+
+QDateTime XmlTaskFactory::parseTimestamp(const QString& stamp) const
+{
+    // RTM returns all timestamps in UTC but QDateTime
+    // can't parse the trailing "Z" from the RFC-3339 notation,
+    // so we explicitly set the QDateTime to UTC and chop off the
+    // "Z"
+    QDateTime dt = QDateTime::fromString(stamp.left(stamp.length() - 1), Qt::ISODate);
+    dt.setTimeSpec(Qt::UTC);
+    return dt;
 }
 
 void XmlTaskFactory::characters(const QStringRef &value)
