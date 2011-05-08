@@ -44,6 +44,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: okbutton.height
+        color: "black"
         Button {
             id: okbutton
             label: "OK"
