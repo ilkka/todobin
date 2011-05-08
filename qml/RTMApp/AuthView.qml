@@ -15,13 +15,20 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         color: "white"
     }
-    WebView {
-        id: webview
+    Flickable {
+        id: flickable
         anchors.top: instructions.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: okbutton.top
-        url: api.authUrl
+        contentHeight: Math.max(height, webview.height)
+        contentWidth: Math.max(width, webview.width)
+        WebView {
+            id: webview
+            url: api.authUrl
+            preferredHeight: flickable.height
+            preferredWidth: flickable.width
+        }
     }
     Button {
         id: okbutton
