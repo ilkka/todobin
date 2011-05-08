@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QtGlobal>
 
 #include "settings.h"
 
@@ -91,22 +92,17 @@ RTMInterface::QueryItem RTMInterface::signQueryParams(const QueryItems &queryIte
 void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
 {
     d->netSemaphore.release();
-    QDomDocument doc = parseReply(reply);
-    qDebug() << "frobReceived reply:" << doc.toString(2);
-    QString status = doc.documentElement().attribute("stat");
-    if (status == "ok") {
-        QDomElement frobElement = doc.documentElement().firstChildElement("frob");
+    ApiReplyParseResult result = parseReply(reply);
+    qDebug() << "frobReceived reply:" << result.doc.toString(2);
+    if (result.ok) {
+        QDomElement frobElement = result.doc.documentElement().firstChildElement("frob");
         d->frob = frobElement.firstChild().toText().data();
         qDebug() << "Got frob" << d->frob;
         updateAuthUrl();
         emit authenticationNeeded(d->authUrl);
-    } else if (status == "fail"){
-        QDomElement errorElement = doc.documentElement().firstChildElement("err");
-        QString errorMsg = errorElement.attribute("msg");
-        QString errorCode = errorElement.attribute("code");
-        qWarning() << "getFrob failed with code" << errorCode << ":" << errorMsg;
     } else {
-        qWarning() << "Unknown status" << status;
+        qWarning() << "getFrob failed with code"
+                   << result.errorCode << ":" << result.errorMsg;
     }
     reply->deleteLater();
 }
@@ -114,8 +110,15 @@ void RTMInterface::handleGetFrobReply(QNetworkReply *reply)
 void RTMInterface::handleCheckTokenReply(QNetworkReply *reply)
 {
     d->netSemaphore.release();
-    QDomDocument doc = parseReply(reply);
-    qDebug() << "checkToken reply:" << doc.toString(2);
+    ApiReplyParseResult result = parseReply(reply);
+    qDebug() << "checkToken reply:" << result.doc.toString(2);
+    if (result.ok) {
+        qDebug() << "Token is OK";
+    } else {
+        qWarning() << "checkToken failed with code"
+                   << result.errorCode << ":" << result.errorMsg;
+    }
+    reply->deleteLater();
 }
 
 void RTMInterface::updateAuthUrl()
@@ -134,29 +137,56 @@ void RTMInterface::updateAuthUrl()
     }
 }
 
-QDomDocument RTMInterface::parseReply(QIODevice *reply)
+RTMInterface::ApiReplyParseResult RTMInterface::parseReply(QIODevice *reply)
 {
-    QDomDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(reply, &errorMsg, &errorLine, &errorColumn)) {
-        qCritical() << "Error parsing getFrob reply:"
-                    << errorMsg << "at line" << errorLine
-                    << "col" << errorColumn;
-        throw ParseError();
+    ApiReplyParseResult result;
+    if (!result.doc.setContent(reply, &result.errorMsg)) {
+        qCritical() << "Error parsing API reply:" << result.errorMsg;
+        result.ok = false;
+    } else {
+        QString status = result.doc.documentElement().attribute("stat");
+        if (status == "ok") {
+            result.ok = true;
+        } else if (status == "fail") {
+            result.ok = false;
+            QDomElement errorElement = result.doc.documentElement().firstChildElement("err");
+            result.errorMsg = errorElement.attribute("msg");
+            result.errorCode = errorElement.attribute("code");
+        } else {
+            result.ok = false;
+            result.errorCode = "unknown";
+            result.errorMsg = QString("Unknown status \"%1\"").arg(status);
+        }
     }
-    return doc;
+    return result;
 }
 
 void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
 {
-
+    d->netSemaphore.release();
+    ApiReplyParseResult result = parseReply(reply);
+    qDebug() << "getToken reply:" << result.doc.toString(2);
+    reply->deleteLater();
 }
 
 void RTMInterface::authenticationCompleted()
 {
+    getToken();
+}
 
+void RTMInterface::getToken()
+{
+    Q_ASSERT_X(!d->frob.isEmpty(), "RTMInterface::authenticationCompleted",
+               "Frob cannot be empty at this point");
+    QueryItems params;
+    params << QueryItem("frob", d->frob);
+    QUrl url = apiUrlForMethod("rtm.auth.getToken", params);
+    qDebug() << "getToken with URL" << url.toString();
+    d->netSemaphore.acquire();
+    d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
+    connect(d->net, SIGNAL(finished(QNetworkReply*)),
+            SLOT(handleGetTokenReply(QNetworkReply*)));
+    d->net->get(QNetworkRequest(url));
 }
 
 QUrl RTMInterface::apiUrlForMethod(const QString& method,

@@ -72,9 +72,9 @@ private:
     void checkToken(const QString& token);
 
     /**
-     * Parse a RTM API network reply and return DOM document.
+     * Get authentication token from RTM.
      */
-    QDomDocument parseReply(QIODevice* reply);
+    void getToken();
 
     typedef QPair<QString, QString> QueryItem;
     typedef QList<QueryItem> QueryItems;
@@ -95,6 +95,22 @@ private:
      */
     QUrl apiUrlForMethod(const QString& method,
                          const QueryItems& extra_params = QueryItems());
+
+    /**
+     * Struct for holding the result of an API reply parse attempt.
+     */
+    struct ApiReplyParseResult {
+        bool ok;
+        QString errorCode;
+        QString errorMsg;
+        QDomDocument doc;
+    };
+
+    /**
+     * Parse a RTM API network reply and return DOM document.
+     */
+    ApiReplyParseResult parseReply(QIODevice* reply);
+
 };
 
 #endif // RTMINTERFACE_H
