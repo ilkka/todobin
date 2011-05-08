@@ -36,8 +36,25 @@ public:
     QUrl authUrl();
 
 signals:
+    /**
+     * Emitted if the auth URL changes. In practice it only
+     * changes when we're unauthenticated and receive a frob.
+     */
     void authUrlChanged();
+
+    /**
+     * The user has to authenticate using a browser before
+     * we can continue. The signal handler should display
+     * the URL given as parameter, and call authenticationCompleted()
+     * when the process is finished.
+     */
     void authenticationNeeded(QUrl authUrl);
+
+    /**
+     * API initialization is complete and requests can be
+     * issued to API methods.
+     */
+    void initializationCompleted();
 
 private slots:
 

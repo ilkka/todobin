@@ -114,9 +114,11 @@ void RTMInterface::handleCheckTokenReply(QNetworkReply *reply)
     qDebug() << "checkToken reply:" << result.doc.toString(2);
     if (result.ok) {
         qDebug() << "Token is OK";
+        emit initializationCompleted();
     } else {
         qWarning() << "checkToken failed with code"
                    << result.errorCode << ":" << result.errorMsg;
+        requestFrob();
     }
     reply->deleteLater();
 }
@@ -173,6 +175,7 @@ void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
         qDebug() << "Got token" << token;
         Settings settings;
         settings.setValue(Settings::FOURSQUARE_TOKEN, token);
+        emit initializationCompleted();
     } else {
         qWarning() << "getToken failed with code"
                    << result.errorCode << ":" << result.errorMsg;
