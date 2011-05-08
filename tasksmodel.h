@@ -12,7 +12,9 @@ class TasksModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum TaskRoles {
-        TitleRole = Qt::UserRole + 1
+        TitleRole = Qt::UserRole + 1,
+        DueRole,
+        TagsRole
     };
 
     explicit TasksModel(QObject *parent = 0);

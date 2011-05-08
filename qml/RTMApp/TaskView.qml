@@ -17,7 +17,11 @@ Rectangle {
         clip: true
 
         model: tasksModel
-        delegate: Text { text: title }
+        delegate: Text {
+            text: title
+                  + (tags.length > 0 ? " [" + tags + "]" : "")
+                  + (due.length > 0 ? " (due " + due + ")" : "")
+        }
 
         Component.onCompleted: tasksModel.populate()
     }

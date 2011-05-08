@@ -8,6 +8,8 @@ TasksModel::TasksModel(QObject *parent) :
     // Set roles
     QHash<int, QByteArray> roles;
     roles[TitleRole] = "title";
+    roles[DueRole] = "due";
+    roles[TagsRole] = "tags";
     setRoleNames(roles);
 }
 
@@ -26,18 +28,42 @@ int TasksModel::rowCount(const QModelIndex &parent) const
 
 QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == TitleRole && orientation == Qt::Horizontal && section == 0) {
-        return QVariant("Title");
+    QVariant header;
+    if (orientation == Qt::Horizontal && section == 0) {
+        switch (role) {
+        case TitleRole:
+            header = "Title";
+            break;
+        case DueRole:
+            header = "Due";
+            break;
+        case TagsRole:
+            header = "Tags";
+            break;
+        default:
+            break;
+        }
     }
-    return QVariant();
+    return header;
 }
 
 QVariant TasksModel::data(const QModelIndex &index, int role) const
 {
-    if (index.isValid() && role == TitleRole) {
-        return QVariant(d->tasks.at(index.row())->title());
+    QVariant data;
+    if (index.isValid()) {
+        Task* t = d->tasks.at(index.row());
+        switch (role) {
+        case TitleRole:
+            data = t->title();
+            break;
+        case DueRole:
+            data = t->due().toString(Qt::TextDate);
+            break;
+        case TagsRole:
+            data = t->tags().join(", ");
+        }
     }
-    return QVariant();
+    return data;
 }
 
 void TasksModel::addTask(Task *t)
