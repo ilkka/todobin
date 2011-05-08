@@ -32,7 +32,7 @@ Rectangle {
                 }
                 Text {
                     id: tasktitle
-                    text: "<b" + title + "</b>"
+                    text: "<b>" + title + "</b>"
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.margins: 5
