@@ -1,6 +1,5 @@
 import QtQuick 1.0
 import "./Components"
-import "app.js" as App
 
 Rectangle {
     id: root
