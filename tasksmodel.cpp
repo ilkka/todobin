@@ -10,6 +10,7 @@ TasksModel::TasksModel(QObject *parent) :
     roles[TitleRole] = "title";
     roles[DueRole] = "due";
     roles[TagsRole] = "tags";
+    roles[NotesRole] = "notes";
     setRoleNames(roles);
 }
 
@@ -40,6 +41,9 @@ QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int ro
         case TagsRole:
             header = "Tags";
             break;
+        case NotesRole:
+            header = "Notes";
+            break;
         default:
             break;
         }
@@ -61,6 +65,8 @@ QVariant TasksModel::data(const QModelIndex &index, int role) const
             break;
         case TagsRole:
             data = t->tags().join(", ");
+        case NotesRole:
+            data = t->notes();
         }
     }
     return data;

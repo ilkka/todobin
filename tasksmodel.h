@@ -14,7 +14,8 @@ public:
     enum TaskRoles {
         TitleRole = Qt::UserRole + 1,
         DueRole,
-        TagsRole
+        TagsRole,
+        NotesRole
     };
 
     explicit TasksModel(QObject *parent = 0);
