@@ -11,6 +11,8 @@ TasksModel::TasksModel(QObject *parent) :
     roles[DueRole] = "due";
     roles[TagsRole] = "tags";
     roles[NotesRole] = "notes";
+    roles[CompletedRole] = "completed";
+    roles[IsCompletedRole] = "isCompleted";
     setRoleNames(roles);
 }
 
@@ -44,6 +46,12 @@ QVariant TasksModel::headerData(int section, Qt::Orientation orientation, int ro
         case NotesRole:
             header = "Notes";
             break;
+        case CompletedRole:
+            header = "Completed";
+            break;
+        case IsCompletedRole:
+            header = "Is completed";
+            break;
         default:
             break;
         }
@@ -68,6 +76,12 @@ QVariant TasksModel::data(const QModelIndex &index, int role) const
             break;
         case NotesRole:
             data = t->notes();
+            break;
+        case CompletedRole:
+            data = t->completed();
+            break;
+        case IsCompletedRole:
+            data = t->isCompleted();
         }
     }
     return data;

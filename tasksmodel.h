@@ -15,7 +15,9 @@ public:
         TitleRole = Qt::UserRole + 1,
         DueRole,
         TagsRole,
-        NotesRole
+        NotesRole,
+        CompletedRole,
+        IsCompletedRole
     };
 
     explicit TasksModel(QObject *parent = 0);
