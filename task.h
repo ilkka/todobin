@@ -15,6 +15,7 @@ class Task : public QObject
     Q_PROPERTY(Priority priority READ priority WRITE setPriority NOTIFY priorityChanged)
     Q_PROPERTY(QDateTime completed READ completed NOTIFY completedChanged)
     Q_PROPERTY(bool isCompleted READ isCompleted NOTIFY isCompletedChanged)
+    Q_PROPERTY(QStringList notes READ notes WRITE setNotes NOTIFY notesChanged)
 public:
     // valid task priorities
     enum Priority {
@@ -33,6 +34,13 @@ public:
         }
     }
 
+    Q_INVOKABLE void addNote(const QString& note) {
+        if (!m_notes.contains(note)) {
+            m_notes << note;
+            emit notesChanged();
+        }
+    }
+
     // getters
     const QString& title() const { return m_title; }
     const QDateTime& due() const { return m_due; }
@@ -40,6 +48,7 @@ public:
     Priority priority() const { return m_priority; }
     const QDateTime& completed() const { return m_completed; }
     bool isCompleted() const { return m_completed.isValid(); }
+    const QStringList& notes() const { return m_notes; }
 
     // setters
     void setTitle(const QString& title) {
@@ -76,6 +85,12 @@ public:
             }
         }
     }
+    void setNotes(const QStringList& notes) {
+        if (m_notes != notes) {
+            m_notes = notes;
+            emit notesChanged();
+        }
+    }
 
 signals:
     void titleChanged();
@@ -84,6 +99,7 @@ signals:
     void priorityChanged();
     void completedChanged();
     void isCompletedChanged();
+    void notesChanged();
 
 private:
     QString m_title;
@@ -91,6 +107,7 @@ private:
     QStringList m_tags;
     Priority m_priority;
     QDateTime m_completed;
+    QStringList m_notes;
 };
 
 #endif // TASK_H
