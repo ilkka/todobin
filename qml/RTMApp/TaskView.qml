@@ -68,23 +68,11 @@ Rectangle {
                     }
                 }
 
-
-                Item {
+                CheckBox {
                     id: completedMarker
                     anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
-                    width: isCompleted ? Math.max(tickImage.width, completedLabel.width) : 0
-                    height: isCompleted ? tickImage.height + completedLabel.height : 0
-                    visible: isCompleted
-                    Image {
-                        id: tickImage
-                        anchors { top: parent.top; horizontalCenter: parent.horizontalCenter }
-                        source: "images/green_tick.svg"
-                    }
-                    Text {
-                        id: completedLabel
-                        text: "Completed"
-                        anchors { top: tickImage.bottom; horizontalCenter: tickImage.horizontalCenter }
-                    }
+                    checked: isCompleted
+                    label: "Complete"
                 }
 
                 // Close button that is only visible in expanded mode
