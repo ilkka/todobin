@@ -33,78 +33,66 @@ Rectangle {
             Item {
                 id: toplayout
                 x: 2 * internalMargin
+                y: 2 * internalMargin
                 width: tasklist.width - 4 * task.internalMargin
-                height: tasktitle.paintedHeight
-                        + tasktags.paintedHeight
-                        + taskduedate.paintedHeight
-                        + 4 * task.internalMargin
-                TextEdit {
-                    id: tasktitle
-                    text: "<b>" + title + "</b>"
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: taskControls.left
-                    anchors.margins: task.internalMargin
-                    readOnly: true
-                    wrapMode: TextEdit.Wrap
-                }
-                TextEdit {
-                    id: tasktags
-                    text: (tags.length > 0 ? "Tags: " + tags : "")
-                    anchors.top: tasktitle.bottom
-                    anchors.left: parent.left
-                    anchors.right: taskControls.left
-                    anchors.margins: task.internalMargin
-                    readOnly: true
-                    wrapMode: TextEdit.Wrap
-                }
-                TextEdit {
-                    id: taskduedate
-                    text: (due.length > 0 ? "Due " + due : "")
-                    anchors.top: tasktags.bottom
-                    anchors.left: parent.left
-                    anchors.right: taskControls.left
-                    anchors.margins: task.internalMargin
-                    readOnly: true
-                    wrapMode: TextEdit.Wrap
-                }
+                height: taskinfo.height
+
+                // This item wraps the info that is always visible
                 Column {
-                    id: taskControls
+                    id: taskinfo
+                    anchors.top: parent.top
+                    width: parent.width - completedMarker.width
+                    height: childrenRect.height
+
+                    TextEdit {
+                        id: tasktitle
+                        width: parent.width
+                        text: "<b>" + title + "</b>"
+                        readOnly: true
+                        wrapMode: TextEdit.Wrap
+                    }
+                    TextEdit {
+                        id: tasktags
+                        width: parent.width
+                        text: (tags.length > 0 ? "Tags: " + tags : "")
+                        readOnly: true
+                        wrapMode: TextEdit.Wrap
+                    }
+                    TextEdit {
+                        id: taskduedate
+                        width: parent.width
+                        text: (due.length > 0 ? "Due " + due : "")
+                        readOnly: true
+                        wrapMode: TextEdit.Wrap
+                    }
+                }
+
+
+                Item {
+                    id: completedMarker
                     anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
-                    width: task.state == "details" || isCompleted ? childrenRect.width : 0
-                    height: task.state == "details" || isCompleted ? childrenRect.height : 0
-                    spacing: task.internalMargin
-                    Item {
-                        id: completedMarker
-                        width: isCompleted ? Math.max(tickImage.width, completedLabel.width) : 0
-                        height: isCompleted ? tickImage.height + completedLabel.height : 0
-                        visible: isCompleted
-                        Image {
-                            id: tickImage
-                            anchors { top: parent.top; horizontalCenter: parent.horizontalCenter }
-                            source: "images/green_tick.svg"
-                        }
-                        Text {
-                            id: completedLabel
-                            text: "Completed"
-                            anchors { top: tickImage.bottom; horizontalCenter: tickImage.horizontalCenter }
-                        }
+                    width: isCompleted ? Math.max(tickImage.width, completedLabel.width) : 0
+                    height: isCompleted ? tickImage.height + completedLabel.height : 0
+                    visible: isCompleted
+                    Image {
+                        id: tickImage
+                        anchors { top: parent.top; horizontalCenter: parent.horizontalCenter }
+                        source: "images/green_tick.svg"
                     }
+                    Text {
+                        id: completedLabel
+                        text: "Completed"
+                        anchors { top: tickImage.bottom; horizontalCenter: tickImage.horizontalCenter }
+                    }
+                }
 
-                    // Close button that is only visible in expanded mode
-                    Button {
-                        id: closebutton
-                        label: "Close"
-                        opacity: task.detailsOpacity
-                        onClicked: task.state = ""
-                    }
-
-                    Button {
-                        id: markCompletedButton
-                        label: "Done"
-                        opacity: task.detailsOpacity
-                        onClicked: tasklist.model.markCompleted(index)
-                    }
+                // Close button that is only visible in expanded mode
+                Button {
+                    id: closebutton
+                    label: "Close"
+                    opacity: task.detailsOpacity
+                    anchors { top: completedMarker.bottom; right: parent.right }
+                    onClicked: task.state = ""
                 }
             }
 
@@ -158,6 +146,9 @@ Rectangle {
                     detailsOpacity: 1
                     height: toplayout.height + detailslayout.height + 2 * task.internalMargin
                 }
+                // Move the details so the completed marker and
+                // close button are not covered
+                PropertyChanges { target: taskinfo; width: task.width - Math.max(completedMarker.width, closebutton.width) }
             }
 
             Behavior on detailsOpacity { NumberAnimation { duration: 300 } }
