@@ -6,6 +6,10 @@ Widget {
     property bool checked : false
     property string label : ""
 
+    // If true, clicking the checkbox won't change its checked state
+    // immediately, changing it is instead left to the user.
+    property bool updateManually : false
+
     width: Math.max(background.width, labelview.width) + 2 * margin
     height: background.height + labelview.height + 2 * margin
 
