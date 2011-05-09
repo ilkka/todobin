@@ -230,7 +230,8 @@ void RTMInterface::requestTaskList()
     Q_ASSERT_X(!d->token.isEmpty(), "RTMInterface::requestTaskList",
                "Token cannot be empty");
     QueryItems params;
-    params << QueryItem("auth_token", d->token);
+    params << QueryItem("auth_token", d->token)
+           << QueryItem("filter", "status:incomplete");
     QUrl url = apiUrlForMethod("rtm.tasks.getList", params);
     qDebug() << "get tasklist with URL" << url.toString();
     d->netSemaphore.acquire();
