@@ -25,7 +25,7 @@ Rectangle {
             Rectangle {
                 id: background
                 anchors.fill: parent
-                anchors.margins: internalMargin
+                anchors.margins: task.internalMargin
                 radius: 8
                 color: "#e0e0e0";
             }
@@ -38,32 +38,54 @@ Rectangle {
 
             Item {
                 id: toplayout
-                x: internalMargin
-                width: tasklist.width - 2 * internalMargin
+                x: 2 * internalMargin
+                width: tasklist.width - 4 * task.internalMargin
                 height: tasktitle.paintedHeight
                         + tasktags.paintedHeight
                         + taskduedate.paintedHeight
-                        + 4 * internalMargin
-                Text {
+                        + 4 * task.internalMargin
+                TextEdit {
                     id: tasktitle
                     text: "<b>" + title + "</b>"
                     anchors.top: parent.top
                     anchors.left: parent.left
-                    anchors.margins: 5
+                    anchors.right: parent.right
+                    anchors.margins: task.internalMargin
+                    activeFocusOnPress: false
+                    readOnly: true
+                    wrapMode: TextEdit.Wrap
                 }
-                Text {
+                TextEdit {
                     id: tasktags
-                    text: (tags.length > 0 ? " [" + tags + "]" : "")
+                    text: (tags.length > 0 ? "Tags: " + tags : "")
                     anchors.top: tasktitle.bottom
                     anchors.left: parent.left
-                    anchors.margins: 5
+                    anchors.right: parent.right
+                    anchors.margins: task.internalMargin
+                    activeFocusOnPress: false
+                    readOnly: true
+                    wrapMode: TextEdit.Wrap
                 }
-                Text {
+                TextEdit {
                     id: taskduedate
-                    text: (due.length > 0 ? " (due " + due + ")" : "")
+                    text: (due.length > 0 ? "Due " + due : "")
                     anchors.top: tasktags.bottom
                     anchors.left: parent.left
-                    anchors.margins: 5
+                    anchors.right: parent.right
+                    anchors.margins: task.internalMargin
+                    activeFocusOnPress: false
+                    readOnly: true
+                    wrapMode: TextEdit.Wrap
+                }
+                // Close button that is only visible in expanded mode
+                Button {
+                    id: closebutton
+                    label: "Close"
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.margins: task.internalMargin
+                    opacity: task.detailsOpacity
+                    onClicked: task.state = ""
                 }
             }
 
@@ -71,6 +93,7 @@ Rectangle {
                 id: detailslayout
                 x: task.internalMargin
                 width: tasklist.width - 2 * task.internalMargin
+
                 anchors { top: toplayout.bottom; bottom: parent.bottom }
                 opacity: task.detailsOpacity
 
@@ -78,6 +101,12 @@ Rectangle {
                     id: notelist
                     anchors.fill: detailslayout
                     anchors.margins: task.internalMargin
+                    spacing: task.internalMargin
+
+                    Text {
+                        text: "<b>Notes:</b>"
+                    }
+
                     Repeater {
                         model: notes
                         TextEdit {
@@ -105,6 +134,10 @@ Rectangle {
                     explicit: true
                     contentY: task.y
                 }
+                // Format the delegates so the close button isn't covered
+                PropertyChanges { target: tasktitle; anchors.right: closebutton.left; }
+                PropertyChanges { target: tasktags; anchors.right: closebutton.left; }
+                PropertyChanges { target: taskduedate; anchors.right: closebutton.left; }
             }
 
             transitions: Transition {
