@@ -83,6 +83,7 @@ Rectangle {
                         TextEdit {
                             width: notelist.width
                             readOnly: true
+                            wrapMode: TextEdit.Wrap
                             text: modelData
                         }
                     }
