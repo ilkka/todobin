@@ -73,6 +73,7 @@ Rectangle {
                     anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
                     width: task.state == "details" || isCompleted ? childrenRect.width : 0
                     height: task.state == "details" || isCompleted ? childrenRect.height : 0
+                    spacing: task.internalMargin
                     Item {
                         id: completedMarker
                         width: isCompleted ? Math.max(tickImage.width, completedLabel.width) : 0
@@ -96,6 +97,13 @@ Rectangle {
                         label: "Close"
                         opacity: task.detailsOpacity
                         onClicked: task.state = ""
+                    }
+
+                    Button {
+                        id: markCompletedButton
+                        label: "Done"
+                        opacity: task.detailsOpacity
+                        onClicked: tasklist.model.markCompleted(index)
                     }
                 }
             }
