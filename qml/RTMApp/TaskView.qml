@@ -83,7 +83,10 @@ Rectangle {
             // Tapping the delegate puts it in details mode
             MouseArea {
                 anchors.fill: parent
-                onClicked: task.state = "details"
+                onClicked: {
+                    tasklist.positionViewAtIndex(index, ListView.Beginning)
+                    task.state = "details"
+                }
             }
 
             Item {
@@ -125,12 +128,6 @@ Rectangle {
                     detailsOpacity: 1
                     height: tasklist.height
                 }
-                // Scroll the list to place the task at the top
-                PropertyChanges {
-                    target: task.ListView.view
-                    explicit: true
-                    contentY: task.y
-                }
                 // Format the delegates so the close button isn't covered
                 PropertyChanges { target: tasktitle; anchors.right: closebutton.left; }
                 PropertyChanges { target: tasktags; anchors.right: closebutton.left; }
@@ -140,7 +137,7 @@ Rectangle {
             transitions: Transition {
                 NumberAnimation {
                     duration: 300
-                    properties: "detailsOpacity,height,contentY"
+                    properties: "detailsOpacity,height"
                 }
             }
         }
