@@ -46,14 +46,6 @@ Rectangle {
         }
     }
 
-    Component {
-        id: taskHilight
-        Rectangle {
-            color: "lightgreen"
-            radius: 8
-        }
-    }
-
     ListView {
         id: tasklist
 
@@ -66,7 +58,6 @@ Rectangle {
 
         model: tasksModel
         delegate: taskDelegate
-        highlight: taskHilight
 
         Component.onCompleted: tasksModel.populate()
     }
