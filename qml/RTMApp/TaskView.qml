@@ -7,6 +7,7 @@ Rectangle {
     height: 200
 
     signal requestSettingsView
+    signal requestMarkTaskCompleted(string id)
 
     Component {
         id: taskDelegate
