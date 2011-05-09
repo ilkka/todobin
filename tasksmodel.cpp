@@ -65,6 +65,7 @@ QVariant TasksModel::data(const QModelIndex &index, int role) const
             break;
         case TagsRole:
             data = t->tags().join(", ");
+            break;
         case NotesRole:
             data = t->notes();
         }
