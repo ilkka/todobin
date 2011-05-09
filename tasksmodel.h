@@ -53,6 +53,11 @@ public slots:
      */
     void addTask(Task* t);
 
+    /**
+     * Mark the task at the index as completed.
+     */
+    void markCompleted(int index);
+
 private:
     friend class TasksModelPrivate;
     TasksModelPrivate* const d;
