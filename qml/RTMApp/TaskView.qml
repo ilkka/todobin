@@ -83,6 +83,7 @@ Rectangle {
             // Tapping the delegate puts it in details mode
             MouseArea {
                 anchors.fill: parent
+                visible: task.state != "details"
                 onClicked: {
                     tasklist.positionViewAtIndex(index, ListView.Beginning)
                     task.state = "details"
