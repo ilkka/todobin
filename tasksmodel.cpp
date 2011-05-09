@@ -112,6 +112,6 @@ void TasksModel::setTaskCompleted(int index, bool completed)
     Task* t = d->tasks.at(index);
     if (!t->isCompleted() == completed) {
         t->setCompleted(QDateTime::currentDateTimeUtc());
-        emit dataChanged(createIndex(0, index));
+        emit dataChanged(createIndex(0, index), createIndex(0, index));
     }
 }
