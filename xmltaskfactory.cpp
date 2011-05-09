@@ -256,8 +256,10 @@ void XmlTaskFactory::addNoteToCurrentTask()
     Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::addNoteToCurrentTask", "No current task");
     if (!d->lastTextNodeContents.isEmpty()) {
         qDebug() << "Adding note" << d->lastNoteTitle << "to task" << d->currentTask->title();
+        // Change newlines to HTML breaks:
+        d->lastTextNodeContents.replace('\n', "<br/>");
         if (!d->lastNoteTitle.isEmpty()) {
-            d->currentTask->addNote(QString("<b>%1:</b>\n%2").arg(d->lastNoteTitle, d->lastTextNodeContents));
+            d->currentTask->addNote(QString("<b>%1</b><br/>%2").arg(d->lastNoteTitle, d->lastTextNodeContents));
         } else {
             d->currentTask->addNote(d->lastTextNodeContents);
         }
