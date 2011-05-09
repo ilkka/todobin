@@ -36,13 +36,13 @@ Rectangle {
                 x: 2 * internalMargin
                 y: 2 * internalMargin
                 width: tasklist.width - 4 * task.internalMargin
-                height: taskinfo.height
+                height: childrenRect.height
 
                 // This item wraps the info that is always visible
                 Column {
                     id: taskinfo
                     anchors.top: parent.top
-                    width: parent.width - completedMarker.width
+                    width: parent.width - completedMarker.width - 2 * task.internalMargin
                     height: childrenRect.height
 
                     TextEdit {
