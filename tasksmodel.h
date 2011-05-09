@@ -17,7 +17,8 @@ public:
         TagsRole,
         NotesRole,
         CompletedRole,
-        IsCompletedRole
+        IsCompletedRole,
+        IdRole
     };
 
     explicit TasksModel(QObject *parent = 0);
