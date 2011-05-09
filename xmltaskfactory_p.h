@@ -20,6 +20,7 @@ public:
     QStateMachine sm;
     QString lastTextNodeContents;
     QXmlName currentElementName;
+    QString lastNoteTitle;
 };
 
 #endif // XMLTASKFACTORY_P_H

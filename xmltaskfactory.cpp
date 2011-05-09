@@ -91,6 +91,10 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
         } else if (attributeName == "priority") {
             handlePriorityAttribute(value.toString());
         }
+    } else if (nodename == "note") {
+        if (attributeName == "title") {
+            d->lastNoteTitle = value.toString();
+        }
     }
 }
 
