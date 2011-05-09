@@ -30,12 +30,6 @@ Rectangle {
                 color: "#e0e0e0";
             }
 
-            // Tapping the delegate puts it in details mode
-            MouseArea {
-                anchors.fill: parent
-                onClicked: task.state = "details"
-            }
-
             Item {
                 id: toplayout
                 x: 2 * internalMargin
@@ -51,7 +45,6 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: task.internalMargin
-                    activeFocusOnPress: false
                     readOnly: true
                     wrapMode: TextEdit.Wrap
                 }
@@ -62,7 +55,6 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: task.internalMargin
-                    activeFocusOnPress: false
                     readOnly: true
                     wrapMode: TextEdit.Wrap
                 }
@@ -73,7 +65,6 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: task.internalMargin
-                    activeFocusOnPress: false
                     readOnly: true
                     wrapMode: TextEdit.Wrap
                 }
@@ -87,6 +78,12 @@ Rectangle {
                     opacity: task.detailsOpacity
                     onClicked: task.state = ""
                 }
+            }
+
+            // Tapping the delegate puts it in details mode
+            MouseArea {
+                anchors.fill: parent
+                onClicked: task.state = "details"
             }
 
             Item {
