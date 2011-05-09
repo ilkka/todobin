@@ -92,15 +92,16 @@ Rectangle {
 
             Item {
                 id: detailslayout
-                x: task.internalMargin
-                width: tasklist.width - 2 * task.internalMargin
+                x: task.internalMargin * 2
+                width: tasklist.width - 4 * task.internalMargin
+                height: notelist.height + 2 * task.internalMargin
+                anchors { top: toplayout.bottom }
 
-                anchors { top: toplayout.bottom; bottom: parent.bottom }
                 opacity: task.detailsOpacity
 
                 Column {
                     id: notelist
-                    anchors.fill: detailslayout
+                    anchors { left: detailslayout.left; right: detailslayout.right }
                     anchors.margins: task.internalMargin
                     spacing: task.internalMargin
 
@@ -127,7 +128,7 @@ Rectangle {
                 PropertyChanges {
                     target: task
                     detailsOpacity: 1
-                    height: tasklist.height
+                    height: toplayout.height + detailslayout.height + 2 * task.internalMargin
                 }
                 // Format the delegates so the close button isn't covered
                 PropertyChanges { target: tasktitle; anchors.right: closebutton.left; }
@@ -135,12 +136,8 @@ Rectangle {
                 PropertyChanges { target: taskduedate; anchors.right: closebutton.left; }
             }
 
-            transitions: Transition {
-                NumberAnimation {
-                    duration: 300
-                    properties: "detailsOpacity,height"
-                }
-            }
+            Behavior on detailsOpacity { NumberAnimation { duration: 300 } }
+            Behavior on height { NumberAnimation { duration: 300 } }
         }
     }
 
