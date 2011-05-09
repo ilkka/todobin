@@ -99,8 +99,11 @@ void TasksModel::populate()
     emit requestTaskList();
 }
 
-void TasksModel::markCompleted(int index)
+void TasksModel::setTaskCompleted(int index, bool completed)
 {
     Task* t = d->tasks.at(index);
-    t->setCompleted(QDateTime::currentDateTimeUtc());
+    if (!t->isCompleted() == completed) {
+        t->setCompleted(QDateTime::currentDateTimeUtc());
+        emit dataChanged(createIndex(0, index));
+    }
 }

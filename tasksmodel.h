@@ -54,9 +54,9 @@ public slots:
     void addTask(Task* t);
 
     /**
-     * Mark the task at the index as completed.
+     * Change the completed state of the task at the given row.
      */
-    void markCompleted(int index);
+    void setTaskCompleted(int index, bool completed);
 
 private:
     friend class TasksModelPrivate;
