@@ -48,6 +48,8 @@ XmlTaskFactory::XmlTaskFactory(QObject *parent) :
     // from notes into note and back
     in_notes->addTransition(this, SIGNAL(enterNoteElement()), in_note);
     in_note->addTransition(this, SIGNAL(leaveCurrentElement()), in_notes);
+    // leaving note adds the last seen text node as a note to the current task
+    connect(in_note, SIGNAL(exited()), SLOT(addNoteToCurrentTask()));
     // leaving taskseries takes us back to root
     taskseries_root->addTransition(this, SIGNAL(leaveCurrentElement()), root);
 
@@ -91,7 +93,7 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
         } else if (attributeName == "priority") {
             handlePriorityAttribute(value.toString());
         }
-    } else if (nodename == "note") {
+    } else if (nodeName == "note") {
         if (attributeName == "title") {
             d->lastNoteTitle = value.toString();
         }
@@ -201,6 +203,9 @@ void XmlTaskFactory::startElement(const QXmlName &name)
     } else if (localname == "tags") {
         emit enterTagsElement();
     } else if (localname == "tag") {
+        // Clear out the text node holder so we *know* it came
+        // from this tag if not empty.
+        d->lastTextNodeContents = "";
         emit enterTagElement();
     } else if (localname == "participants") {
         emit enterParticipantsElement();
@@ -209,6 +214,11 @@ void XmlTaskFactory::startElement(const QXmlName &name)
     } else if (localname == "notes") {
         emit enterNotesElement();
     } else if (localname == "note") {
+        // Same as for tag, make sure the note text comes from
+        // this element
+        d->lastTextNodeContents = "";
+        // also forget the title
+        d->lastNoteTitle = "";
         emit enterNoteElement();
     } else if (localname == "task") {
         emit enterTaskElement();
@@ -236,6 +246,22 @@ void XmlTaskFactory::finishCreateTask()
 
 void XmlTaskFactory::addTagToCurrentTask()
 {
+    Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::addTagToCurrentTask", "No current task");
     qDebug() << "Adding tag" << d->lastTextNodeContents << "to task" << d->currentTask->title();
     d->currentTask->addTag(d->lastTextNodeContents);
+}
+
+void XmlTaskFactory::addNoteToCurrentTask()
+{
+    Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::addNoteToCurrentTask", "No current task");
+    if (!d->lastTextNodeContents.isEmpty()) {
+        qDebug() << "Adding note" << d->lastNoteTitle << "to task" << d->currentTask->title();
+        if (!d->lastNoteTitle.isEmpty()) {
+            d->currentTask->addNote(QString("<b>%1:</b>\n%2").arg(d->lastNoteTitle, d->lastTextNodeContents));
+        } else {
+            d->currentTask->addNote(d->lastTextNodeContents);
+        }
+    } else {
+        qDebug() << "Refusing to add an empty note";
+    }
 }

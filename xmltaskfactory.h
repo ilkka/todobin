@@ -52,6 +52,7 @@ signals:
 private slots:
     void startCreateTask();
     void finishCreateTask();
+    void addNoteToCurrentTask();
     void addTagToCurrentTask();
 
 private:
