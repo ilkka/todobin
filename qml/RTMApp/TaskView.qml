@@ -69,14 +69,23 @@ Rectangle {
 
             Item {
                 id: detailslayout
-                x: internalMargin
-                width: tasklist.width - 2 * internalMargin
+                x: task.internalMargin
+                width: tasklist.width - 2 * task.internalMargin
                 anchors { top: toplayout.bottom; bottom: parent.bottom }
                 opacity: task.detailsOpacity
 
-                Text {
-                    anchors.centerIn: parent
-                    text: "This is details"
+                Column {
+                    id: notelist
+                    anchors.fill: detailslayout
+                    anchors.margins: task.internalMargin
+                    Repeater {
+                        model: notes
+                        TextEdit {
+                            width: notelist.width
+                            readOnly: true
+                            text: modelData
+                        }
+                    }
                 }
             }
 
