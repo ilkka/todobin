@@ -33,6 +33,11 @@ Widget {
             visible: root.checked
             source: "../images/green_tick.svg"
         }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.checked = !root.checked
+        }
     }
 
     Text {
