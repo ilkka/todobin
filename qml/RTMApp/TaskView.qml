@@ -68,21 +68,30 @@ Rectangle {
                     }
                 }
 
-                CheckBox {
-                    id: completedMarker
-                    anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
-                    checked: isCompleted
-                    label: "Complete"
-                }
-
                 // Close button that is only visible in expanded mode
                 Button {
                     id: closebutton
                     label: "Close"
                     opacity: task.detailsOpacity
-                    anchors { top: completedMarker.bottom; right: parent.right }
+                    anchors { top: toplayout.top; right: parent.right }
                     onClicked: task.state = ""
+                    states: State {
+                        when: task.state == "details"
+                        PropertyChanges {
+                            target: closebutton
+                            anchors.top: completedMarker.bottom
+                        }
+                    }
                 }
+
+                // Checkbox both for showing the "done" state and for
+                // marking tasks done
+                CheckBox {
+                    id: completedMarker
+                    anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
+                    checked: isCompleted
+                }
+
             }
 
             // Tapping the delegate puts it in details mode
