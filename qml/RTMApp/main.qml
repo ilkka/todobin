@@ -1,4 +1,5 @@
 import QtQuick 1.0
+import "./Components"
 
 Rectangle {
     id: root
@@ -7,17 +8,31 @@ Rectangle {
 
     states: State {
         name: "landscape"
-        PropertyChanges {
-            target: root
-            width: 800
-            height: 480
-        }
     }
+
+    transitions: [
+        Transition {
+            ScriptAction {
+                script: {
+                    var tmpw = root.width
+                    root.width = root.height
+                    root.height = tmpw
+                }
+            }
+        }
+    ]
 
     Loader {
         id: pageloader
         anchors.fill: parent
         source: "Splash.qml"
+    }
+
+    Button {
+        id: orientationbutton
+        anchors { right: parent.right; bottom: parent.bottom }
+        label: "Orient"
+        onClicked: root.state = (root.state == "") ? "landscape" : ""
     }
 
     Connections {

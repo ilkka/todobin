@@ -15,6 +15,10 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # (This might significantly increase build time)
 DEFINES += QMLJSDEBUGGER
 
+maemo5 {
+DEFINES += ON_MAEMO_5
+}
+
 # If your application uses the Qt Mobility libraries, uncomment
 # the following lines and add the respective components to the 
 # MOBILITY variable. 

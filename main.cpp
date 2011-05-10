@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("tasksModel", &model);
     viewer.rootContext()->setContextProperty("api", &api);
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+#ifndef ON_MAEMO_5
+    // I guess we're on desktop?
+    viewer.setResizeMode(QmlApplicationViewer::SizeViewToRootObject);
+#endif
     viewer.setMainQmlFile(QLatin1String("qml/RTMApp/main.qml"));
     viewer.showExpanded();
 
