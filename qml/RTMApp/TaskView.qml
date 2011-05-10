@@ -99,7 +99,6 @@ Rectangle {
                 anchors.fill: parent
                 visible: task.state != "details"
                 onClicked: {
-                    tasklist.positionViewAtIndex(index, ListView.Beginning)
                     task.state = "details"
                 }
             }
@@ -149,8 +148,15 @@ Rectangle {
                 PropertyChanges { target: taskinfo; width: task.width - Math.max(completedMarker.width, closebutton.width) }
             }
 
-            Behavior on detailsOpacity { NumberAnimation { duration: 300 } }
-            Behavior on height { NumberAnimation { duration: 300 } }
+            // Move the view only after resizes have happened
+            transitions: Transition {
+                SequentialAnimation {
+                    ParallelAnimation {
+                        NumberAnimation { properties: "detailsOpacity,height"; duration: 300 }
+                    }
+                    ScriptAction { script: tasklist.positionViewAtIndex(index, ListView.Contain) }
+                }
+            }
         }
     }
 
