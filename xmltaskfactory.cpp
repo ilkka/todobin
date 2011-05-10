@@ -81,10 +81,16 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
     QString attributeName = name.localName(d->query.namePool());
     QString nodeName = d->currentElementName.localName(d->query.namePool());
     qDebug() << "Hit attribute" << attributeName << "in" << nodeName;
-    if (nodeName == "taskseries" && attributeName == "name") {
-        Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
-        d->currentTask->setTitle(value.toString());
-        qDebug() << "Set current task title to" << d->currentTask->title();
+    if (nodeName == "taskseries") {
+        if (attributeName == "name") {
+            Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
+            d->currentTask->setTitle(value.toString());
+            qDebug() << "Set current task title to" << value.toString();
+        } else if (attributeName == "id"){
+            Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
+            d->currentTask->setSeriesId(value.toString());
+            qDebug() << "Set current task series ID to" << value.toString();
+        }
     } else if (nodeName == "task") {
         if (attributeName == "due") {
             handleDueAttribute(value.toString());
@@ -92,6 +98,10 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
             handleCompletedAttribute(value.toString());
         } else if (attributeName == "priority") {
             handlePriorityAttribute(value.toString());
+        } else if (attributeName == "id") {
+            Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
+            d->currentTask->setTaskId(value.toString());
+            qDebug() << "Set current task ID to" << value.toString();
         }
     } else if (nodeName == "note") {
         if (attributeName == "title") {
