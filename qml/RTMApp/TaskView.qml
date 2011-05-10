@@ -37,6 +37,11 @@ Rectangle {
                 y: 2 * internalMargin
                 width: tasklist.width - 4 * task.internalMargin
                 height: childrenRect.height
+                clip: true
+
+                Behavior on height {
+                    NumberAnimation { duration: 300 }
+                }
 
                 // This item wraps the info that is always visible
                 Column {
@@ -72,16 +77,20 @@ Rectangle {
                 Button {
                     id: closebutton
                     label: "Close"
-                    opacity: task.detailsOpacity
                     anchors { top: toplayout.top; right: parent.right }
                     onClicked: task.state = ""
-                    states: State {
-                        when: task.state == "details"
-                        PropertyChanges {
-                            target: closebutton
-                            anchors.top: completedMarker.bottom
+                    visible: false
+
+                    states: [
+                        State {
+                            when: task.state == "details"
+                            PropertyChanges {
+                                target: closebutton
+                                anchors.top: completedMarker.bottom
+                                visible: true
+                            }
                         }
-                    }
+                    ]
                 }
 
                 // Checkbox both for showing the "done" state and for
