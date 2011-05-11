@@ -68,6 +68,11 @@ public slots:
      */
     void requestTaskList();
 
+    /**
+     * Request RTM to mark task as completed.
+     */
+    void requestMarkTaskCompleted(const QString& listId, const QString& seriesId, const QString& taskId);
+
 private slots:
 
     // API reply handlers for methods
@@ -75,6 +80,7 @@ private slots:
     void handleCheckTokenReply(QNetworkReply* reply);
     void handleGetTokenReply(QNetworkReply* reply);
     void handleTaskListReply(QNetworkReply* reply);
+    void handleTimelineReply(QNetworkReply* reply);
 
     /**
      * Update auth URL after e.g. frob has changed.
@@ -105,6 +111,11 @@ private:
      * Get authentication token from RTM.
      */
     void requestToken();
+
+    /**
+     * Request a timeline from RTM.
+     */
+    void requestTimeline();
 
     typedef QPair<QString, QString> QueryItem;
     typedef QList<QueryItem> QueryItems;

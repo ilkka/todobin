@@ -260,3 +260,28 @@ void RTMInterface::handleTaskListReply(QNetworkReply *reply)
     }
     reply->deleteLater();
 }
+
+void RTMInterface::requestMarkTaskCompleted(const QString& listId,
+                                            const QString &seriesId,
+                                            const QString &taskId)
+{
+    QueryItems params;
+    params << QueryItem("auth_token", d->token)
+           << QueryItem("")
+    if (d->timeline.isEmpty()) {
+        requestTimeline();
+    }
+
+}
+
+void RTMInterface::requestTimeline()
+{
+    QueryItems params;
+    params << QueryItem("auth_token", d->token);
+    QUrl url = apiUrlForMethod("rtm.timelines.create", params);
+    qDebug() << "create timeline with URL" << url.toString();
+    d->netSemaphore.acquire();
+    d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
+    connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(handleTimelineReply(QNetworkReply*)));
+    d->net->get(QNetworkRequest(url));
+}
