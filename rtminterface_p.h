@@ -16,6 +16,7 @@ public:
     QString token;
     QString username;
     QString fullname;
+    QString timeline;
 };
 
 #endif // RTMINTERFACE_P_H
