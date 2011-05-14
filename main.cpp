@@ -9,6 +9,10 @@
 #include "xmltaskfactory.h"
 #include "rtminterface.h"
 
+#ifdef STATIC_DATA_TEST
+#include "dummyapi.h"
+#endif
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -20,22 +24,31 @@ int main(int argc, char *argv[])
     XmlTaskFactory factory;
     QObject::connect(&factory, SIGNAL(newTask(Task*)), &model, SLOT(addTask(Task*)));
 
+    QmlApplicationViewer viewer;
+
+#ifndef STATIC_DATA_TEST
     RTMInterface api;
+#else
+    DummyApi api;
+#endif
 
     // connect api, model and factory to enable task list fetching
     // and adding the tasks to the model
     api.connect(&model, SIGNAL(requestTaskList()), SLOT(requestTaskList()));
     factory.connect(&api, SIGNAL(taskListReceived(QIODevice*)), SLOT(setSource(QIODevice*)));
+    // Provide API to QML UI
+    viewer.rootContext()->setContextProperty("api", &api);
 
-    QmlApplicationViewer viewer;
     viewer.rootContext()->setContextProperty("settings", &settings);
     viewer.rootContext()->setContextProperty("tasksModel", &model);
-    viewer.rootContext()->setContextProperty("api", &api);
+
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+
 #ifndef ON_MAEMO_5
-    // I guess we're on desktop?
+    // For testing/debug
     viewer.setResizeMode(QmlApplicationViewer::SizeViewToRootObject);
 #endif
+
     viewer.setMainQmlFile(QLatin1String("qml/RTMApp/main.qml"));
     viewer.showExpanded();
 
