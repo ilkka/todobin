@@ -283,3 +283,8 @@ void RTMInterface::requestTimeline()
     connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(handleTimelineReply(QNetworkReply*)));
     d->net->get(QNetworkRequest(url));
 }
+
+void RTMInterface::handleTimelineReply(QNetworkReply *reply)
+{
+    // TODO
+}
