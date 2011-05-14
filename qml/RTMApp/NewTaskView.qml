@@ -6,6 +6,8 @@ Item {
     width: 480
     height: 800
 
+    signal requestCreateTask(string title, string tags, string estimate, string note)
+
     Column {
         id: col1
         anchors { top: parent.top; bottom: parent.bottom; left: parent.left; right: col2.left }
@@ -34,6 +36,23 @@ Item {
             width: parent.width
             hint: "Note"
         }
+        Row {
+            id: controls
+            width: parent.width
+            Button {
+                id: save
+                label: "Create"
+                onClicked: root.requestCreateTask(titlefield.text,
+                                                  tagsfield.text,
+                                                  estimatefield.text,
+                                                  notefield.text)
+            }
+        }
+    }
+
+    onRequestCreateTask: {
+        console.debug("Would create task: " + title + " "
+                      + tags + " " + estimate + " " + note)
     }
 
     Column {
