@@ -36,6 +36,11 @@ Item {
             height: parent.height / 3
             hint: "Note"
         }
+
+        DatePicker {
+            id: datepicker
+        }
+
         Row {
             id: controls
             width: parent.width
