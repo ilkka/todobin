@@ -169,20 +169,59 @@ Rectangle {
         }
     }
 
-    ListView {
-        id: tasklist
+    Flipable {
+        id: flipper
+
+        property bool flipped: false
 
         anchors.top: parent.top
         anchors.bottom: controls.top
         anchors.left: parent.left
         anchors.right: parent.right
 
-        clip: true
+        front: ListView {
+            id: tasklist
+            clip: true
+            anchors.fill: parent
 
-        model: tasksModel
-        delegate: taskDelegate
+            model: tasksModel
+            delegate: taskDelegate
 
-        Component.onCompleted: tasksModel.populate()
+            Component.onCompleted: tasksModel.populate()
+        }
+
+        back: Item {
+            anchors.fill: parent
+            Loader {
+                id: flipbackloader
+                anchors.fill: parent
+            }
+            Button {
+                label: "Back"
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                onClicked: flipper.flipped = false
+            }
+        }
+
+        transform: Rotation {
+            id: fliprotation
+            origin.x: flipper.width/2; origin.y: flipper.height/2
+            axis.x: 0; axis.y: 1; axis.z: 0
+            angle: 0
+        }
+
+        states: State {
+            name: "back"
+            when: flipper.flipped
+            PropertyChanges {
+                target: fliprotation; angle: 180
+            }
+        }
+
+        transitions: Transition {
+            NumberAnimation { target: fliprotation; property: "angle"; duration: 300 }
+        }
     }
 
     Row {
@@ -198,7 +237,18 @@ Rectangle {
 
         Button {
             label: "Settings"
-            onClicked: root.requestSettingsView()
+            onClicked: {
+                flipbackloader.source = "SettingsView.qml"
+                flipper.flipped = true
+            }
+        }
+
+        Button {
+            label: "New"
+            onClicked: {
+                flipbackloader.source = "NewTaskView.qml"
+                flipper.flipped = true
+            }
         }
     }
 }

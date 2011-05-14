@@ -38,7 +38,7 @@ Rectangle {
     Connections {
         target: api
         onAuthenticationNeeded: pageloader.source = "AuthView.qml"
-        onInitializationCompleted: pageloader.source = "TaskView.qml"
+        onInitializationCompleted: pageloader.source = "TaskListView.qml"
     }
 
     Component.onCompleted: {
