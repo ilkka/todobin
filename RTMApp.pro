@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     rtminterface.cpp \
     tasksmodel.cpp \
     xmltaskfactory.cpp \
-    task.cpp
+    task.cpp \
+    dummyapi.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -47,7 +48,8 @@ HEADERS += \
     xmltaskfactory.h \
     task.h \
     xmltaskfactory_p.h \
-    rtminterface_p.h
+    rtminterface_p.h \
+    dummyapi.h
 
 OTHER_FILES += \
     qtc_packaging/debian_fremantle/rules \
