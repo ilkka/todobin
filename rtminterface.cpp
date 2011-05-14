@@ -261,17 +261,15 @@ void RTMInterface::handleTaskListReply(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void RTMInterface::requestMarkTaskCompleted(const QString& listId,
+void RTMInterface::requestMarkTaskCompleted(const QString &listId,
                                             const QString &seriesId,
                                             const QString &taskId)
 {
     QueryItems params;
-    params << QueryItem("auth_token", d->token)
-           << QueryItem("")
+    params << QueryItem("auth_token", d->token);
     if (d->timeline.isEmpty()) {
         requestTimeline();
     }
-
 }
 
 void RTMInterface::requestTimeline()
