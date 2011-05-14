@@ -13,27 +13,27 @@ Item {
         anchors { top: parent.top; bottom: parent.bottom; left: parent.left; right: col2.left }
 
         TextField {
-            anchors.left: parent.left
+            id: titlefield
             width: parent.width
             hint: "Task title"
         }
 
         TextField {
-            anchors.left: parent.left
+            id: tagsfield
             width: parent.width
             hint: "Tags"
         }
 
         TextField {
-            anchors.left: parent.left
+            id: estimatefield
             width: parent.width
             hint: "Estimate"
         }
 
         TextArea {
             id: notefield
-            anchors.left: parent.left
             width: parent.width
+            height: parent.height / 3
             hint: "Note"
         }
         Row {
