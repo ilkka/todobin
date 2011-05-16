@@ -27,6 +27,7 @@ RTMInterface::RTMInterface(QObject *parent) :
 {
     d->net = new QNetworkAccessManager(this);
     d->netSemaphore.release();
+    d->pendingModification = 0;
 }
 
 RTMInterface::~RTMInterface()
@@ -265,15 +266,23 @@ void RTMInterface::requestMarkTaskCompleted(const QString &listId,
                                             const QString &seriesId,
                                             const QString &taskId)
 {
-    QueryItems params;
-    params << QueryItem("auth_token", d->token);
+    Q_ASSERT_X(d->pendingModification == 0, "RTMInterface::requestMarkTaskCompleted", "Old pending modification in the pipeline");
+    d->pendingModification = new TaskModification;
+    d->pendingModification->listId = listId;
+    d->pendingModification->seriesId = seriesId;
+    d->pendingModification->taskId = taskId;
+    d->pendingModification->type = TaskModification::MOD_COMPLETE;
     if (d->timeline.isEmpty()) {
+        connect(this, SIGNAL(timelineReceived()), SLOT(performPendingModification()));
         requestTimeline();
+    } else {
+        performPendingModification();
     }
 }
 
 void RTMInterface::requestTimeline()
 {
+    Q_ASSERT_X(!d->token.isEmpty(), "RTMInterface::requestTimeline", "Token can't be empty");
     QueryItems params;
     params << QueryItem("auth_token", d->token);
     QUrl url = apiUrlForMethod("rtm.timelines.create", params);
@@ -286,5 +295,52 @@ void RTMInterface::requestTimeline()
 
 void RTMInterface::handleTimelineReply(QNetworkReply *reply)
 {
-    // TODO
+    d->netSemaphore.release();
+    ApiReplyParseResult result = parseReply(reply);
+    qDebug() << "timeline reply:" << result.doc.toString(2);
+    if (result.ok) {
+        QDomElement timelineElement = result.doc.documentElement().firstChildElement("timeline");
+        d->timeline = timelineElement.firstChild().toText().data();
+        qDebug() << "Got timeline" << d->timeline;
+        emit timelineReceived();
+    } else {
+        qWarning() << "Timeline creation failed with code"
+                   << result.errorCode << ":" << result.errorMsg;
+    }
+    reply->deleteLater();
+}
+
+void RTMInterface::performPendingModification()
+{
+    Q_ASSERT_X(d->pendingModification != 0, "RTMInterface::performPendingModification", "No pending modification");
+    Q_ASSERT_X(!d->token.isEmpty(), "RTMInterface::performPendingModification", "Token can't be empty");
+    Q_ASSERT_X(!d->timeline.isEmpty(), "RTMInterface::performPendingModification", "Timeline can't be empty");
+    QueryItems params;
+    params << QueryItem("auth_token", d->token)
+           << QueryItem("timeline", d->timeline)
+           << QueryItem("list_id", d->pendingModification->listId)
+           << QueryItem("taskseries_id", d->pendingModification->seriesId)
+           << QueryItem("task_id", d->pendingModification->taskId);
+    QUrl url;
+    switch(d->pendingModification->type) {
+    case TaskModification::MOD_COMPLETE:
+        url = apiUrlForMethod("rtm.tasks.complete", params);
+        break;
+    default:
+        url = apiUrlForMethod("rtm.test.echo", params);
+        break;
+    }
+    qDebug() << "Perform task modification:" << url.toString();
+    d->netSemaphore.acquire();
+    d->net->disconnect(SIGNAL(finished(QNetworkReply*)));
+    connect(d->net, SIGNAL(finished(QNetworkReply*)), SLOT(handleTaskModificationReply(QNetworkReply*)));
+    d->net->get(QNetworkRequest(url));
+}
+
+void RTMInterface::handleTaskModificationReply(QNetworkReply *reply)
+{
+    d->netSemaphore.release();
+    Q_ASSERT_X(d->pendingModification != 0, "RTMInterface::handleTaskModificationReply", "No pending modification");
+    delete d->pendingModification;
+    d->pendingModification = 0;
 }

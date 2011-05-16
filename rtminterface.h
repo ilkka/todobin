@@ -62,6 +62,15 @@ signals:
      */
     void taskListReceived(QIODevice* tasklist);
 
+    /**
+     * RTM has given us a timeline. This is mostly for internal use,
+     * to enable RTMInterface to queue requests. When it needs to modify
+     * a task but doesn't yet have a timeline, it requests a timeline
+     * and temporarily connects to this signal with a slot that will
+     * retry the original task modification.
+     */
+    void timelineReceived();
+
 public slots:
     /**
      * Get task list from RTM.
@@ -81,11 +90,18 @@ private slots:
     void handleGetTokenReply(QNetworkReply* reply);
     void handleTaskListReply(QNetworkReply* reply);
     void handleTimelineReply(QNetworkReply* reply);
+    void handleTaskModificationReply(QNetworkReply* reply);
 
     /**
      * Update auth URL after e.g. frob has changed.
      */
     void updateAuthUrl();
+
+    /**
+     * Perform pending modification. Used to e.g. finish a task complete
+     * operation that first needed to fetch a timeline.
+     */
+    void performPendingModification();
 
 private:
     friend class RTMInterfacePrivate;
