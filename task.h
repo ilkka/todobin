@@ -18,6 +18,8 @@ class Task : public QObject
     Q_PROPERTY(QStringList notes READ notes WRITE setNotes NOTIFY notesChanged)
     Q_PROPERTY(QString taskId READ taskId WRITE setTaskId NOTIFY taskIdChanged)
     Q_PROPERTY(QString seriesId READ seriesId WRITE setSeriesId NOTIFY seriesIdChanged)
+    Q_PROPERTY(QString listId READ listId WRITE setListId NOTIFY listIdChanged)
+
 public:
     // valid task priorities
     enum Priority {
@@ -53,6 +55,7 @@ public:
     const QStringList& notes() const { return m_notes; }
     const QString& taskId() const { return m_taskid; }
     const QString& seriesId() const { return m_seriesid; }
+    const QString& listId() const { return m_listid; }
 
     // setters
     void setTitle(const QString& title) {
@@ -107,6 +110,12 @@ public:
             emit seriesIdChanged();
         }
     }
+    void setListId(const QString& id) {
+        if (m_listid != id) {
+            m_listid = id;
+            emit listIdChanged();
+        }
+    }
 
 signals:
     void titleChanged();
@@ -118,6 +127,7 @@ signals:
     void notesChanged();
     void taskIdChanged();
     void seriesIdChanged();
+    void listIdChanged();
 
 private:
     QString m_title;
@@ -128,6 +138,7 @@ private:
     QStringList m_notes;
     QString m_taskid;
     QString m_seriesid;
+    QString m_listid;
 };
 
 #endif // TASK_H

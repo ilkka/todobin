@@ -18,7 +18,9 @@ public:
         NotesRole,
         CompletedRole,
         IsCompletedRole,
-        IdRole
+        ListIdRole,
+        SeriesIdRole,
+        TaskIdRole
     };
 
     explicit TasksModel(QObject *parent = 0);
@@ -40,6 +42,22 @@ public:
     /** @see QAbstractListModel::headerData
       */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    /**
+     * Get index for task with given IDs.
+     * @return index for task or an invalid ID if no such task exists
+     * in model.
+     */
+    QModelIndex indexForTask(const QString& listId,
+                             const QString& seriesId,
+                             const QString& taskId);
+
+    /**
+     * Check if model has task for given IDs.
+     */
+    Q_INVOKABLE bool hasTask(const QString& listId,
+                             const QString& seriesId,
+                             const QString& taskId);
 
 signals:
     /**
