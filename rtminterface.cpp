@@ -343,4 +343,17 @@ void RTMInterface::handleTaskModificationReply(QNetworkReply *reply)
     Q_ASSERT_X(d->pendingModification != 0, "RTMInterface::handleTaskModificationReply", "No pending modification");
     delete d->pendingModification;
     d->pendingModification = 0;
+    ApiReplyParseResult result = parseReply(reply);
+    if (result.ok) {
+        // Making a copy again
+        QBuffer* buf = new QBuffer(this);
+        buf->setData(result.doc.toByteArray(-1));
+        buf->open(QIODevice::ReadOnly);
+        emit taskListReceived(buf);
+        buf->deleteLater();
+    } else {
+        qWarning() << "Task modification failed with code"
+                   << result.errorCode << ":" << result.errorMsg;
+    }
+    reply->deleteLater();
 }
