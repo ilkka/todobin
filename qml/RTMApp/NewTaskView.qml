@@ -37,10 +37,6 @@ Item {
             hint: "Note"
         }
 
-        DatePicker {
-            id: datepicker
-        }
-
         Row {
             id: controls
             width: parent.width
@@ -50,6 +46,9 @@ Item {
                 enabled: titlefield.text
                 onClicked: {
                     api.requestCreateTask(titlefield.text)
+                    titlefield.text = ""
+                    tagsfield.text = ""
+                    notefield.text = ""
                     root.completed()
                     // TODO: do something with the rest of the fields
                 }
