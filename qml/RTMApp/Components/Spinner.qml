@@ -5,7 +5,7 @@ Widget {
     width: 80
     height: 200
 
-    property int value: 0
+    property int value: list.currentIndex + minimumValue
     property int minimumValue: 0
     property int maximumValue: 10
 
@@ -19,9 +19,11 @@ Widget {
         var newCount = maximumValue - minimumValue + 1
         while (spinnermodel.count > newCount) {
             spinnermodel.remove(spinnermodel.count - 1)
+            list.contentHeight -= list.textmodel.height + root.margin
         }
         while (spinnermodel.count < newCount) {
             spinnermodel.append({})
+            list.contentHeight += list.textmodel.height + root.margin
         }
         if (value < minimumValue) {
             value = minimumValue
@@ -43,59 +45,74 @@ Widget {
         anchors.margins: root.margin
 
         ListView {
-            id: flicker
+            id: list
             anchors.fill: parent
             anchors.margins: window.radius / 2
             model: spinnermodel
             clip: true
 
             property variant textmodel: Text { font.pointSize: root.fontPointSize; text: "1" }
-            property int endpadding: flicker.height / 2 - textmodel.paintedHeight / 2
+            property int endpadding: list.height / 2 - textmodel.paintedHeight / 2
+
+            preferredHighlightBegin: endpadding
+            preferredHighlightEnd: endpadding + textmodel.height
+            highlightRangeMode: moving ? ListView.NoHighlightRange : ListView.StrictlyEnforceRange
+            highlightFollowsCurrentItem: true
 
             header: Item {
-                width: flicker.width
-                height: flicker.endpadding
+                width: list.width
+                height: list.endpadding
             }
 
             footer: Item {
-                width: flicker.width
-                height: flicker.endpadding
+                width: list.width
+                height: list.endpadding
             }
 
             spacing: root.margin
 
             delegate: Text {
                 font.pointSize: root.fontPointSize
-                width: flicker.width
+                width: list.width
                 horizontalAlignment: Text.AlignHCenter
                 text: root.minimumValue + index
             }
 
-            // This handler makes the flickable snap to the numbers
-            onMovementEnded: {
+            onContentYChanged: {
+                // calculate new value for currentIndex
+                console.debug("ContentY: " + contentY)
                 var yOffset = textmodel.paintedHeight + root.margin
-                var overshoot = contentY % yOffset
-                if (overshoot >= yOffset / 2) {
-                    contentY += yOffset - overshoot
-                } else {
-                    contentY -= overshoot
-                }
-                value = Math.floor(contentY / yOffset)
+                var newIndex = Math.floor(contentY / yOffset)
+                if (newIndex < 0) { newIndex = 0 }
+                else if (newIndex >= count) { newIndex = count - 1 }
+                console.debug("New value be " + newIndex)
+                currentIndex = newIndex
             }
-        }
 
-        Rectangle {
-            id: highlight
-            anchors.verticalCenter: parent.verticalCenter
-            width: parent.width
-            height: flicker.textmodel.paintedHeight + 2 * root.margin
-            color: "#5566ee"
-            opacity: 0.7
+            Component {
+                id: highlight
+                Rectangle {
+                    width: parent.width
+                    height: list.textmodel.paintedHeight + 2 * root.margin
+                    color: "#5566ee"
+                    opacity: 0.7
+                }
+            }
+
+            onHighlightRangeModeChanged: {
+                console.debug("Highlight range mode now " + highlightRangeMode)
+            }
+
+            onCurrentItemChanged: console.debug("Current item changed")
+
+            highlight: highlight
         }
     }
 
+    onValueChanged: console.log("Value now " + value)
+
     Component.onCompleted: {
         adjustItems()
-        flicker.positionViewAtIndex(value - minimumValue, ListView.Center)
+        list.currentIndex = 0
     }
 }
