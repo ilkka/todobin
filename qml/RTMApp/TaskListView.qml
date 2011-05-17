@@ -240,14 +240,6 @@ Rectangle {
         }
 
         Button {
-            label: "Settings"
-            onClicked: {
-                flipbackloader.source = "SettingsView.qml"
-                flipper.flipped = true
-            }
-        }
-
-        Button {
             label: "New"
             onClicked: {
                 flipbackloader.source = "NewTaskView.qml"
