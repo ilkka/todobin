@@ -35,12 +35,13 @@ Widget {
         radius: 8
         anchors.fill: parent
         anchors.margins: root.margin
-        clip: true
 
         ListView {
             id: flicker
             anchors.fill: parent
+            anchors.margins: window.radius / 2
             model: spinnermodel
+            clip: true
 
             property variant textmodel: Text { font.pointSize: root.fontPointSize; text: "1" }
             property int endpadding: flicker.height / 2 - textmodel.paintedHeight / 2 - root.margin
