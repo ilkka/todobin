@@ -95,5 +95,8 @@ Widget {
         }
     }
 
-    Component.onCompleted: adjustItems()
+    Component.onCompleted: {
+        adjustItems()
+        flicker.positionViewAtIndex(value, ListView.Center)
+    }
 }
