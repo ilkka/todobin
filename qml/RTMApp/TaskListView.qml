@@ -203,18 +203,9 @@ Rectangle {
             Component.onCompleted: tasksModel.populate()
         }
 
-        back: Item {
+        back: Loader {
+            id: flipbackloader
             anchors.fill: parent
-            Loader {
-                id: flipbackloader
-                anchors.fill: parent
-            }
-            Button {
-                label: "Back"
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                onClicked: flipper.flipped = false
-            }
         }
 
         transform: Rotation {
@@ -263,5 +254,10 @@ Rectangle {
                 flipper.flipped = true
             }
         }
+    }
+
+    Connections {
+        target: flipbackloader.item
+        onCompleted: flipper.flipped = false
     }
 }
