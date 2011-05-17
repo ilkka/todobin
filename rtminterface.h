@@ -82,6 +82,11 @@ public slots:
      */
     void requestMarkTaskCompleted(const QString& listId, const QString& seriesId, const QString& taskId);
 
+    /**
+     * Request RTM to mark task as uncompleted.
+     */
+    void requestMarkTaskUncompleted(const QString& listId, const QString& seriesId, const QString& taskId);
+
 private slots:
 
     // API reply handlers for methods

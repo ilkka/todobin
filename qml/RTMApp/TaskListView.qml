@@ -102,6 +102,9 @@ Rectangle {
                     onCheckRequested: {
                         api.requestMarkTaskCompleted(listId, seriesId, taskId)
                     }
+                    onUncheckRequested: {
+                        api.requestMarkTaskUncompleted(listId, seriesId, taskId)
+                    }
                 }
 
             }

@@ -280,6 +280,22 @@ void RTMInterface::requestMarkTaskCompleted(const QString &listId,
     }
 }
 
+void RTMInterface::requestMarkTaskUncompleted(const QString &listId, const QString &seriesId, const QString &taskId)
+{
+    Q_ASSERT_X(d->pendingModification == 0, "RTMInterface::requestMarkTaskUncompleted", "Old pending modification in the pipeline");
+    d->pendingModification = new TaskModification;
+    d->pendingModification->listId = listId;
+    d->pendingModification->seriesId = seriesId;
+    d->pendingModification->taskId = taskId;
+    d->pendingModification->type = TaskModification::MOD_UNCOMPLETE;
+    if (d->timeline.isEmpty()) {
+        connect(this, SIGNAL(timelineReceived()), SLOT(performPendingModification()));
+        requestTimeline();
+    } else {
+        performPendingModification();
+    }
+}
+
 void RTMInterface::requestTimeline()
 {
     Q_ASSERT_X(!d->token.isEmpty(), "RTMInterface::requestTimeline", "Token can't be empty");
@@ -326,6 +342,9 @@ void RTMInterface::performPendingModification()
     switch(d->pendingModification->type) {
     case TaskModification::MOD_COMPLETE:
         url = apiUrlForMethod("rtm.tasks.complete", params);
+        break;
+    case TaskModification::MOD_UNCOMPLETE:
+        url = apiUrlForMethod("rtm.tasks.uncomplete", params);
         break;
     default:
         url = apiUrlForMethod("rtm.test.echo", params);
