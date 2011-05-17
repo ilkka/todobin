@@ -6,6 +6,8 @@ Item {
     width: 480
     height: 800
 
+    signal completed
+
     Column {
         id: col1
         anchors { top: parent.top; bottom: parent.bottom; left: parent.left; right: col2.left }
@@ -45,8 +47,11 @@ Item {
             Button {
                 id: save
                 label: "Create"
-                onClicked: api.requestCreateTask(titlefield.text)
-                // TODO: do something with the rest of the fields
+                onClicked: {
+                    api.requestCreateTask(titlefield.text)
+                    root.completed()
+                    // TODO: do something with the rest of the fields
+                }
             }
         }
     }
