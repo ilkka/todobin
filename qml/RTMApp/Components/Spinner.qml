@@ -17,7 +17,7 @@ Widget {
     }
 
     function adjustItems() {
-        var newCount = maximumValue - minimumValue - 1
+        var newCount = maximumValue - minimumValue + 1
         while (spinnermodel.count > newCount) {
             spinnermodel.remove(spinnermodel.count - 1)
         }
