@@ -7,13 +7,12 @@ Widget {
 
     property int value: 0
     property int minimumValue: 0
-    property int maximumValue: 0
+    property int maximumValue: 10
 
     property int fontPointSize: 20
 
     ListModel {
         id: spinnermodel
-        ListElement {}
     }
 
     function adjustItems() {
@@ -87,4 +86,6 @@ Widget {
             opacity: 0.7
         }
     }
+
+    Component.onCompleted: adjustItems()
 }
