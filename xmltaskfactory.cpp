@@ -81,7 +81,12 @@ void XmlTaskFactory::attribute(const QXmlName &name, const QStringRef &value)
     QString attributeName = name.localName(d->query.namePool());
     QString nodeName = d->currentElementName.localName(d->query.namePool());
     qDebug() << "Hit attribute" << attributeName << "in" << nodeName;
-    if (nodeName == "taskseries") {
+    if (nodeName == "list") {
+        if (attributeName == "id") {
+            d->currentListId = value.toString();
+            qDebug() << "Set current list ID to" << d->currentListId;
+        }
+    } else if (nodeName == "taskseries") {
         if (attributeName == "name") {
             Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::attribute", "No current task");
             d->currentTask->setTitle(value.toString());

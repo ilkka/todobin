@@ -21,6 +21,7 @@ public:
     QString lastTextNodeContents;
     QXmlName currentElementName;
     QString lastNoteTitle;
+    QString currentListId;
 };
 
 #endif // XMLTASKFACTORY_P_H
