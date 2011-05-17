@@ -7,7 +7,6 @@ Rectangle {
     height: 200
 
     signal requestSettingsView
-    signal requestMarkTaskCompleted(string list_id, string series_id, string task_id)
 
     Component {
         id: taskDelegate
@@ -101,7 +100,7 @@ Rectangle {
                     updateManually: true
                     checked: isCompleted
                     onCheckRequested: {
-                        root.requestMarkTaskCompleted(listId, seriesId, taskId)
+                        api.requestMarkTaskCompleted(listId, seriesId, taskId)
                     }
                 }
 
