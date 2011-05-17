@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     // connect api, model and factory to enable task list fetching
     // and adding the tasks to the model
     api.connect(&model, SIGNAL(requestTaskList()), SLOT(requestTaskList()));
-    factory.connect(&api, SIGNAL(taskListReceived(QIODevice*)), SLOT(setSource(QIODevice*)));
+    factory.connect(&api, SIGNAL(taskListReceived(QIODevice*)), SLOT(parseTaskList(QIODevice*)));
     // Provide API to QML UI
     viewer.rootContext()->setContextProperty("api", &api);
 

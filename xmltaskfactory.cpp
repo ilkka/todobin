@@ -64,7 +64,7 @@ XmlTaskFactory::~XmlTaskFactory()
     delete d;
 }
 
-void XmlTaskFactory::setSource(QIODevice *source)
+void XmlTaskFactory::parseTaskList(QIODevice *source)
 {
     // Build and evaluate query
     d->query.bindVariable("input", source);

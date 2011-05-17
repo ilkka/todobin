@@ -24,12 +24,12 @@ public:
 
 public slots:
     /**
-     * Set XML source for reading tasks.
+     * Parse an XML task list.
      * This will cause the factory to start emitting tasks so make
      * sure something's connected to XmlTaskFactory::newTask.
      * @param source IO device for reading XML from.
      */
-    void setSource(QIODevice *source);
+    void parseTaskList(QIODevice *source);
 
 signals:
     /**
