@@ -111,7 +111,8 @@ Rectangle {
 
             // Tapping the delegate puts it in details mode
             MouseArea {
-                anchors.fill: parent
+                anchors.top: parent.top; anchors.bottom: parent.bottom
+                anchors.left: parent.left; anchors.right: completedMarker.left
                 visible: task.state != "details"
                 onClicked: {
                     task.state = "details"
