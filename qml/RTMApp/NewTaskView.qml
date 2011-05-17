@@ -47,6 +47,7 @@ Item {
             Button {
                 id: save
                 label: "Create"
+                enabled: titlefield.text
                 onClicked: {
                     api.requestCreateTask(titlefield.text)
                     root.completed()
