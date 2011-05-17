@@ -47,10 +47,8 @@ Item {
             Button {
                 id: save
                 label: "Create"
-                onClicked: root.requestCreateTask(titlefield.text,
-                                                  tagsfield.text,
-                                                  estimatefield.text,
-                                                  notefield.text)
+                onClicked: api.requestCreateTask(titlefield.text)
+                // TODO: do something with the rest of the fields
             }
         }
     }

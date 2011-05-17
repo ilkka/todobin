@@ -334,10 +334,16 @@ void RTMInterface::performPendingModification()
     Q_ASSERT_X(!d->timeline.isEmpty(), "RTMInterface::performPendingModification", "Timeline can't be empty");
     QueryItems params;
     params << QueryItem("auth_token", d->token)
-           << QueryItem("timeline", d->timeline)
-           << QueryItem("list_id", d->pendingModification->listId)
-           << QueryItem("taskseries_id", d->pendingModification->seriesId)
-           << QueryItem("task_id", d->pendingModification->taskId);
+           << QueryItem("timeline", d->timeline);
+    if (!d->pendingModification->listId.isEmpty()) {
+        params << QueryItem("list_id", d->pendingModification->listId);
+    }
+    if (!d->pendingModification->seriesId.isEmpty()) {
+        params << QueryItem("taskseries_id", d->pendingModification->seriesId);
+    }
+    if (!d->pendingModification->taskId.isEmpty()) {
+        params << QueryItem("task_id", d->pendingModification->taskId);
+    }
     QUrl url;
     switch(d->pendingModification->type) {
     case TaskModification::MOD_COMPLETE:
@@ -345,6 +351,14 @@ void RTMInterface::performPendingModification()
         break;
     case TaskModification::MOD_UNCOMPLETE:
         url = apiUrlForMethod("rtm.tasks.uncomplete", params);
+        break;
+    case TaskModification::MOD_CREATE:
+        Q_ASSERT_X(!d->pendingModification->title.isEmpty(),
+                   "RTMInterface::performPendingModification",
+                   "Task title can't be empty");
+        params << QueryItem("parse", "1")
+               << QueryItem("name", d->pendingModification->title);
+        url = apiUrlForMethod("rtm.tasks.add", params);
         break;
     default:
         url = apiUrlForMethod("rtm.test.echo", params);
@@ -376,4 +390,18 @@ void RTMInterface::handleTaskModificationReply(QNetworkReply *reply)
                    << result.errorCode << ":" << result.errorMsg;
     }
     reply->deleteLater();
+}
+
+void RTMInterface::requestCreateTask(const QString &name)
+{
+    Q_ASSERT_X(d->pendingModification == 0, "RTMInterface::requestCreateTask", "Old pending modification in the pipeline");
+    d->pendingModification = new TaskModification;
+    d->pendingModification->type = TaskModification::MOD_CREATE;
+    d->pendingModification->title = name;
+    if (d->timeline.isEmpty()) {
+        connect(this, SIGNAL(timelineReceived()), SLOT(performPendingModification()));
+        requestTimeline();
+    } else {
+        performPendingModification();
+    }
 }

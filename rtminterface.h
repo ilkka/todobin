@@ -87,6 +87,15 @@ public slots:
      */
     void requestMarkTaskUncompleted(const QString& listId, const QString& seriesId, const QString& taskId);
 
+    /**
+     * Request RTM to create the given task.
+     * The task name will be parsed according to the Smart Add rules.
+     * @see http://www.rememberthemilk.com/services/smartadd/
+     *
+     * @param name the name of the task and additional Smart Add tokens.
+     */
+    void requestCreateTask(const QString& name);
+
 private slots:
 
     // API reply handlers for methods
