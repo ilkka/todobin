@@ -68,7 +68,7 @@ void XmlTaskFactory::parseTaskList(QIODevice *source)
 {
     // Build and evaluate query
     d->query.bindVariable("input", source);
-    d->query.setQuery("doc($input)//list/taskseries");
+    d->query.setQuery("doc($input)//list");
     d->query.evaluateTo(this);
 }
 
