@@ -16,7 +16,7 @@ struct TaskModification
     QString taskId;
 
     enum ModificationType {
-        MOD_NONE, MOD_TITLE, MOD_ADD_TAG,
+        MOD_NONE, MOD_CREATE, MOD_TITLE, MOD_ADD_TAG,
         MOD_REMOVE_TAG, MOD_ADD_NOTE,
         MOD_REMOVE_NOTE, MOD_COMPLETE,
         MOD_UNCOMPLETE
@@ -25,7 +25,7 @@ struct TaskModification
     ModificationType type;
 
     // If type == MOD_ADD_TAG, this contains the tag to add.
-    // If type == MOD_REMOVE_TAG, this contains the tag to remove
+    // If type == MOD_REMOVE_TAG, this contains the tag to remove.
     QString tag;
 
     // As for tag above
