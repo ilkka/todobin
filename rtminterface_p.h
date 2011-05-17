@@ -30,6 +30,9 @@ struct TaskModification
 
     // As for tag above
     QString note;
+
+    // Title for the task, either for modification or creation
+    QString title;
 };
 
 class RTMInterfacePrivate
