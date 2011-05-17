@@ -312,6 +312,7 @@ void RTMInterface::handleTimelineReply(QNetworkReply *reply)
 
 void RTMInterface::performPendingModification()
 {
+    disconnect(this, SLOT(performPendingModification()));
     Q_ASSERT_X(d->pendingModification != 0, "RTMInterface::performPendingModification", "No pending modification");
     Q_ASSERT_X(!d->token.isEmpty(), "RTMInterface::performPendingModification", "Token can't be empty");
     Q_ASSERT_X(!d->timeline.isEmpty(), "RTMInterface::performPendingModification", "Timeline can't be empty");
