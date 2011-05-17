@@ -30,7 +30,6 @@ Widget {
             value = maximumValue
         }
     }
-    }
 
     onMinimumValueChanged: adjustItems()
     onMaximumValueChanged: adjustItems()
