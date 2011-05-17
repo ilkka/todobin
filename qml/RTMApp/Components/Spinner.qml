@@ -81,7 +81,7 @@ Widget {
                 } else {
                     contentY -= overshoot
                 }
-                value = Math.floor(contentY / yOffset) + 1
+                value = Math.floor(contentY / yOffset)
             }
         }
 
