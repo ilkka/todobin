@@ -44,7 +44,7 @@ Widget {
             clip: true
 
             property variant textmodel: Text { font.pointSize: root.fontPointSize; text: "1" }
-            property int endpadding: flicker.height / 2 - textmodel.paintedHeight / 2 - root.margin
+            property int endpadding: flicker.height / 2 - textmodel.paintedHeight / 2
 
             header: Item {
                 width: flicker.width
