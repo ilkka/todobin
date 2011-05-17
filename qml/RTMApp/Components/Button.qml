@@ -53,9 +53,22 @@ Widget {
             id: hotspot
             anchors.fill: parent
 
+            enabled: root.enabled
+
             onClicked: root.clicked()
             onPressed: root.pressed()
             onReleased: root.released()
         }
+    }
+
+    Rectangle {
+        id: grey
+        visible: !root.enabled
+        anchors.centerIn: background
+        width: background.width
+        height: background.height
+        radius: 8
+        opacity: 0.8
+        color: "#bbbbbb"
     }
 }
