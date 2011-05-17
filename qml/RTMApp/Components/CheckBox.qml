@@ -10,6 +10,11 @@ Widget {
     // immediately, changing it is instead left to the user.
     property bool updateManually : false
 
+    // If updateManually is true, these signals are emitted
+    // when the user tries to check/uncheck the checkbox.
+    signal checkRequested
+    signal uncheckRequested
+
     width: Math.max(background.width, labelview.width) + 2 * margin
     height: background.height + labelview.height + 2 * margin
 
