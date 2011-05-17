@@ -36,11 +36,12 @@ int main(int argc, char *argv[])
     // and adding the tasks to the model
     api.connect(&model, SIGNAL(requestTaskList()), SLOT(requestTaskList()));
     factory.connect(&api, SIGNAL(taskListReceived(QIODevice*)), SLOT(parseTaskList(QIODevice*)));
-    // Provide API to QML UI
-    viewer.rootContext()->setContextProperty("api", &api);
 
+    // Necessary context for UI
+    viewer.rootContext()->setContextProperty("api", &api);
     viewer.rootContext()->setContextProperty("settings", &settings);
     viewer.rootContext()->setContextProperty("tasksModel", &model);
+    viewer.rootContext()->setContextProperty("viewer", &viewer);
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
 
