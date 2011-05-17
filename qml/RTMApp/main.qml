@@ -3,36 +3,13 @@ import "./Components"
 
 Rectangle {
     id: root
-    width: 480
-    height: 800
-
-    states: State {
-        name: "landscape"
-    }
-
-    transitions: [
-        Transition {
-            ScriptAction {
-                script: {
-                    var tmpw = root.width
-                    root.width = root.height
-                    root.height = tmpw
-                }
-            }
-        }
-    ]
+    width: 800
+    height: 480
 
     Loader {
         id: pageloader
         anchors.fill: parent
         source: "Splash.qml"
-    }
-
-    Button {
-        id: orientationbutton
-        anchors { right: parent.right; bottom: parent.bottom }
-        label: "Orient"
-        onClicked: root.state = (root.state == "") ? "landscape" : ""
     }
 
     Connections {
