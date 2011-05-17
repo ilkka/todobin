@@ -22,9 +22,9 @@ public:
     Q_INVOKABLE void setValue(const QString& key, QVariant value);
 
     /**
-     * Settings key for foursquare auth token.
+     * Settings key for RTM auth token.
      */
-    static const QString FOURSQUARE_TOKEN;
+    static const QString RTM_AUTH_TOKEN;
 
 private:
     QSettings m_storage;

@@ -1,9 +1,9 @@
 #include "settings.h"
 
-const QString Settings::FOURSQUARE_TOKEN("foursquare/token");
+const QString Settings::RTM_AUTH_TOKEN("foursquare/token");
 
 Settings::Settings(QObject *parent) :
-    QObject(parent), m_storage("ilkkalaukkanen", "RTMApp", this)
+    QObject(parent), m_storage("ilkkalaukkanen", "todobin", this)
 {
 }
 

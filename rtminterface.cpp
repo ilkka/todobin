@@ -65,7 +65,7 @@ void RTMInterface::checkToken()
 void RTMInterface::initialize()
 {
     Settings settings;
-    QString token = settings.value(Settings::FOURSQUARE_TOKEN).toString();
+    QString token = settings.value(Settings::RTM_AUTH_TOKEN).toString();
     if (token.isEmpty()) {
         // no token was stored, we need to authenticate
         requestFrob();
@@ -181,7 +181,7 @@ void RTMInterface::handleGetTokenReply(QNetworkReply *reply)
         d->token = tokenElement.firstChild().toText().data();
         qDebug() << "Got token" << d->token;
         Settings settings;
-        settings.setValue(Settings::FOURSQUARE_TOKEN, d->token);
+        settings.setValue(Settings::RTM_AUTH_TOKEN, d->token);
         QDomElement userElement = authElement.firstChildElement("user");
         d->username = userElement.attribute("username");
         d->fullname = userElement.attribute("fullname");
