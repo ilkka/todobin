@@ -6,8 +6,6 @@ Item {
     width: 480
     height: 800
 
-    signal requestCreateTask(string title, string tags, string estimate, string note)
-
     Column {
         id: col1
         anchors { top: parent.top; bottom: parent.bottom; left: parent.left; right: col2.left }
@@ -51,11 +49,6 @@ Item {
                 // TODO: do something with the rest of the fields
             }
         }
-    }
-
-    onRequestCreateTask: {
-        console.debug("Would create task: " + title + " "
-                      + tags + " " + estimate + " " + note)
     }
 
     Column {
