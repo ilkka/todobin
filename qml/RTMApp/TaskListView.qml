@@ -100,6 +100,9 @@ Rectangle {
                     anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
                     updateManually: true
                     checked: isCompleted
+                    onCheckRequested: {
+                        root.requestMarkTaskCompleted(listId, seriesId, taskId)
+                    }
                 }
 
             }
