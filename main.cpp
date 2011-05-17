@@ -44,11 +44,6 @@ int main(int argc, char *argv[])
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
 
-#ifndef ON_MAEMO_5
-    // For testing/debug
-    viewer.setResizeMode(QmlApplicationViewer::SizeViewToRootObject);
-#endif
-
     viewer.setMainQmlFile(QLatin1String("qml/RTMApp/main.qml"));
     viewer.showExpanded();
 
