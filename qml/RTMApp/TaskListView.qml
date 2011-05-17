@@ -35,7 +35,8 @@ Rectangle {
                 x: 2 * internalMargin
                 y: 2 * internalMargin
                 width: tasklist.width - 4 * task.internalMargin
-                height: childrenRect.height
+                height: Math.max(childrenRect.height,
+                                 controlsBox.height + 2 * task.internalMargin)
                 clip: true
 
                 Behavior on height {
@@ -46,7 +47,7 @@ Rectangle {
                 Column {
                     id: taskinfo
                     anchors.top: parent.top
-                    width: parent.width - completedMarker.width - 2 * task.internalMargin
+                    width: parent.width - controlsBox.width - 2 * task.internalMargin
                     height: childrenRect.height
 
                     TextEdit {
@@ -72,25 +73,14 @@ Rectangle {
                     }
                 }
 
-                // Close button that is only visible in expanded mode
-                Button {
-                    id: closebutton
-                    label: "Close"
-                    anchors { top: toplayout.top; right: parent.right }
-                    onClicked: task.state = ""
-                    visible: false
+            }
 
-                    states: [
-                        State {
-                            when: task.state == "details"
-                            PropertyChanges {
-                                target: closebutton
-                                anchors.top: completedMarker.bottom
-                                visible: true
-                            }
-                        }
-                    ]
-                }
+            Item {
+                id: controlsBox
+                anchors.top: toplayout.top
+                anchors.right: toplayout.right
+                height: childrenRect.height
+                width: Math.max(completedMarker.width, closebutton.width)
 
                 // Checkbox both for showing the "done" state and for
                 // marking tasks done
@@ -107,12 +97,31 @@ Rectangle {
                     }
                 }
 
+                // Close button that is only visible in expanded mode
+                Button {
+                    id: closebutton
+                    label: "Close"
+                    anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
+                    onClicked: task.state = ""
+                    visible: false
+                    opacity: task.detailsOpacity
+                    states: [
+                        State {
+                            when: task.state == "details"
+                            PropertyChanges {
+                                target: closebutton
+                                anchors.top: completedMarker.bottom
+                                visible: true
+                            }
+                        }
+                    ]
+                }
             }
 
             // Tapping the delegate puts it in details mode
             MouseArea {
                 anchors.top: parent.top; anchors.bottom: parent.bottom
-                anchors.left: parent.left; anchors.right: completedMarker.left
+                anchors.left: parent.left; anchors.right: controlsBox.left
                 visible: task.state != "details"
                 onClicked: {
                     task.state = "details"
@@ -159,9 +168,6 @@ Rectangle {
                     detailsOpacity: 1
                     height: toplayout.height + detailslayout.height + 2 * task.internalMargin
                 }
-                // Move the details so the completed marker and
-                // close button are not covered
-                PropertyChanges { target: taskinfo; width: task.width - Math.max(completedMarker.width, closebutton.width) }
             }
 
             // Move the view only after resizes have happened
