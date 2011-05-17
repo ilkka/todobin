@@ -41,7 +41,17 @@ Widget {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: root.checked = !root.checked
+            onClicked: {
+                if (root.updateManually) {
+                    if (root.checked) {
+                        root.uncheckRequested()
+                    } else {
+                        root.checkRequested()
+                    }
+                } else {
+                    root.checked = !root.checked
+                }
+            }
         }
     }
 
