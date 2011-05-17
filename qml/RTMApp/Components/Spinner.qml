@@ -96,6 +96,6 @@ Widget {
 
     Component.onCompleted: {
         adjustItems()
-        flicker.positionViewAtIndex(value, ListView.Center)
+        flicker.positionViewAtIndex(value - minimumValue, ListView.Center)
     }
 }
