@@ -255,6 +255,7 @@ void XmlTaskFactory::finishCreateTask()
 {
     qDebug() << "finishCreateTask:" << d->currentTask->title();
     Q_ASSERT_X(d->currentTask != 0, "XmlTaskFactory::finishCreateTask", "No current task");
+    d->currentTask->setListId(d->currentListId);
     emit newTask(d->currentTask);
     d->currentTask = 0;
 }
