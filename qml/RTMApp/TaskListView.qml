@@ -98,6 +98,7 @@ Rectangle {
                 CheckBox {
                     id: completedMarker
                     anchors { top: parent.top; right: parent.right; margins: task.internalMargin }
+                    updateManually: true
                     checked: isCompleted
                 }
 
