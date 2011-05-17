@@ -23,6 +23,13 @@ Widget {
         while (spinnermodel.count < newCount) {
             spinnermodel.append({})
         }
+        if (value < minimumValue) {
+            value = minimumValue
+        }
+        if (value > maximumValue) {
+            value = maximumValue
+        }
+    }
     }
 
     onMinimumValueChanged: adjustItems()
